@@ -89,7 +89,7 @@ app.post('/api/chat', async (req, res) => {
                 'Authorization': `Bearer ${groqApiKey}`
             },
             body: JSON.stringify({
-                model: "openai/gpt-oss-20b", // Restauramos el modelo original que funcionaba
+                model: "openai/gpt-oss-120b", // Modelo disponible sin rate limit
                 messages: messages
             })
         });

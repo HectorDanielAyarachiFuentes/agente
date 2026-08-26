@@ -40,11 +40,14 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.post('/api/chat', async (req, res) => {
     try {
         const { question, context, mode, history = [] } = req.body;
-        // El servidor lee la clave secreta aquí, de forma segura
-        const groqApiKey = process.env.GROQ_API_KEY;
+        // El servidor lee las claves secretas aquí
+        const groqApiKeys = [
+            process.env.GROQ_API_KEY,
+            process.env.GROQ_API_KEY_2
+        ].filter(key => key); // Filtramos por si alguna está vacía
 
-        if (!groqApiKey) {
-            return res.status(500).json({ error: 'Clave de API no configurada en el servidor.' });
+        if (groqApiKeys.length === 0) {
+            return res.status(500).json({ error: 'No hay claves de API configuradas en el servidor.' });
         }
         
         let messages = [];
@@ -81,25 +84,61 @@ app.post('/api/chat', async (req, res) => {
             ];
         }
 
-        // El servidor hace la llamada a Groq
-        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${groqApiKey}`
-            },
-            body: JSON.stringify({
-                model: "openai/gpt-oss-120b", // Modelo disponible sin rate limit
-                messages: messages
-            })
-        });
+        // Lista de modelos de contingencia ordenados por preferencia
+        const modelosGroq = [
+            "openai/gpt-oss-120b",
+            "openai/gpt-oss-safeguard-20b",
+            "qwen/qwen3.6-27b",
+            "openai/gpt-oss-20b"
+        ];
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(`Error de la API de Groq: ${errorData.error.message}`);
+        let data = null;
+        let ultimoError = null;
+
+        // Bucle anidado: Intentar con cada clave de API, y para cada clave, probar los modelos
+        for (const apiKey of groqApiKeys) {
+            const keyOculta = apiKey.slice(-4); // Para loggear solo los últimos 4 dígitos por seguridad
+            
+            for (const modeloActual of modelosGroq) {
+                try {
+                    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiKey}`
+                        },
+                        body: JSON.stringify({
+                            model: modeloActual,
+                            messages: messages
+                        })
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        ultimoError = errorData.error?.message || 'Error desconocido';
+                        console.warn(`[API] Falló clave ...${keyOculta} con modelo ${modeloActual}. Pasando al siguiente...`);
+                        continue; 
+                    }
+
+                    data = await response.json();
+                    console.log(`[API] Éxito total usando modelo: ${modeloActual} (Clave ...${keyOculta})`);
+                    break; // Éxito con este modelo, rompemos el bucle interno
+
+                } catch (err) {
+                    ultimoError = err.message;
+                    console.warn(`[API] Fallo de red con modelo ${modeloActual}. Pasando al siguiente...`);
+                    continue;
+                }
+            }
+            // Si después de probar los modelos con esta clave 'data' tiene contenido, rompemos el bucle de claves
+            if (data) break; 
         }
 
-        const data = await response.json();
+        // Si se recorrió absolutamente toda la matriz (claves x modelos) y falló todo
+        if (!data) {
+            throw new Error(`Se agotaron todos los tokens en TODAS las claves y modelos. Último error: ${ultimoError}`);
+        }
+
         // El servidor devuelve solo la respuesta al navegador
         res.json(data);
     } catch (error) {

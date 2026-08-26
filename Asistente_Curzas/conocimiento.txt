@@ -49,3 +49,4 @@ Art 5. El cupo máximo para cada comisión es de 50 alumnos. Si se supera, se as
 Art 6. Para regularizar una materia, se exige 80% de asistencia a clases prácticas y aprobar 2 exámenes parciales (o sus recuperatorios) con nota mínima de 4.
 Art 7. La regularidad tiene una validez de 2 años académicos completos desde el fin de la cursada.
 Art 8. Para rendir final, el alumno debe inscribirse por SIU Guaraní hasta 48 horas hábiles antes de la mesa.
+Art 9. (Correlatividades): Para cursar una materia, basta con tener la condición de alumno regular (cursada aprobada) en las materias correlativas previas, excepto aquellas que en el plan de estudios figuren con "(F)", las cuales exigen tener el examen final aprobado para poder cursar. Sin embargo, para poder rendir el examen final o para promocionar una materia, el alumno debe tener aprobados los exámenes finales de TODAS las correlativas exigidas, sin excepción.

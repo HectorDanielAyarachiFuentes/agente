@@ -8,16 +8,28 @@ require('dotenv').config(); // Carga la clave desde el archivo .env
 const app = express();
 const port = 3000;
 
-// Cargamos las instrucciones y el conocimiento una sola vez al iniciar
-const instruccionesText = fs.readFileSync(path.join(__dirname, '../Asistente_Inscripciones/instrucciones_asistente.txt'), 'utf-8');
-const conocimientoText = fs.readFileSync(path.join(__dirname, '../Asistente_Inscripciones/conocimiento.txt'), 'utf-8');
-const fullSystemPrompt = `
-${instruccionesText}
+// Agente Capacitaciones
+const instruccionesCapacitaciones = fs.readFileSync(path.join(__dirname, '../Asistente_Inscripciones/instrucciones_asistente.txt'), 'utf-8');
+const conocimientoCapacitaciones = fs.readFileSync(path.join(__dirname, '../Asistente_Inscripciones/conocimiento.txt'), 'utf-8');
+const systemPromptCapacitaciones = `
+${instruccionesCapacitaciones}
 
 --- BASE DE CONOCIMIENTO (FUENTES) ---
 Utiliza la siguiente información para responder a las consultas:
 
-${conocimientoText}
+${conocimientoCapacitaciones}
+`;
+
+// Agente Curzas
+const instruccionesCurzas = fs.readFileSync(path.join(__dirname, '../Asistente_Curzas/instrucciones_curzas.txt'), 'utf-8');
+const conocimientoCurzas = fs.readFileSync(path.join(__dirname, '../Asistente_Curzas/conocimiento.txt'), 'utf-8');
+const systemPromptCurzas = `
+${instruccionesCurzas}
+
+--- BASE DE CONOCIMIENTO (FUENTES) ---
+Utiliza la siguiente información para responder a las consultas:
+
+${conocimientoCurzas}
 `;
 
 // Middleware para que el servidor entienda JSON y sirva tu index.html
@@ -37,19 +49,27 @@ app.post('/api/chat', async (req, res) => {
         
         let messages = [];
 
-        if (mode === 'ia') {
-            const systemPrompt = fullSystemPrompt;
+        if (mode === 'capacitaciones') {
+            const systemPrompt = systemPromptCapacitaciones;
+            messages = [
+                { role: "system", content: systemPrompt },
+                ...history,
+                { role: "user", content: question }
+            ];
+        } else if (mode === 'curzas') {
+            const systemPrompt = systemPromptCurzas;
             messages = [
                 { role: "system", content: systemPrompt },
                 ...history,
                 { role: "user", content: question }
             ];
         } else {
-            const systemPrompt = "Eres un asistente experto en análisis de documentos PDF. Responde en español basándote solo en el contexto proporcionado. Mantén en cuenta el historial de la conversación si es relevante.";
+            // Fallback (IA genérica o antiguo modo)
+            const systemPrompt = "Eres un asistente experto.";
             messages = [
                 { role: "system", content: systemPrompt },
                 ...history,
-                { role: "user", content: `Contexto del PDF:\n\n${context}\n\nPregunta: ${question}` }
+                { role: "user", content: question }
             ];
         }
 

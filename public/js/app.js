@@ -2,7 +2,7 @@
   
   let pdfText = '';
   let pdfDocument = null;
-  let currentMode = 'ia';
+  let currentMode = 'capacitaciones';
   let chatHistory = [];
   
   const chatMessages = document.getElementById('chat-messages');
@@ -268,9 +268,29 @@
     }
   });
 
+  const tabButtons = document.querySelectorAll('.tab-btn');
   const mainContent = document.querySelector('.main-content');
 
-  addMessage('Sistema: ¡Bienvenido! Soy tu Agente IA. ¿En qué te puedo ayudar?', 'ai-message');
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (currentMode === btn.dataset.mode) return;
+
+      tabButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      currentMode = btn.dataset.mode;
+      chatMessages.innerHTML = ''; // Limpiar el chat
+      chatHistory = []; // Limpiar historial al cambiar de modo
+      
+      if (currentMode === 'curzas') {
+        addMessage('Sistema: Hola. Soy el Agente de CURZA. Te ayudaré con información sobre la Licenciatura en Gestión de Recursos Humanos.', 'ai-message');
+      } else {
+        addMessage('Sistema: Hola. Soy el Agente de Capacitaciones. ¿En qué te puedo ayudar con el trámite?', 'ai-message');
+      }
+    });
+  });
+
+  addMessage('Sistema: Hola. Soy el Agente de Capacitaciones. ¿En qué te puedo ayudar con el trámite?', 'ai-message');
 
   // ===================================================================
   // Lógica del Divisor (Resizer)

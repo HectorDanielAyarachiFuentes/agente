@@ -202,8 +202,8 @@
   }
   
   async function processQuestion(question) {
-    if (currentMode === 'pdf' && !pdfText) {
-      addMessage('Sistema: Por favor, carga un PDF primero.', 'ai-message');
+    if (currentMode === 'practica3' && !pdfText) {
+      addMessage('Sistema: Por favor, carga el PDF de la solicitud en el panel izquierdo primero.', 'ai-message');
       return;
     }
   
@@ -215,7 +215,7 @@
     const thinkingMessage = addMessage('IA está pensando...', 'ai-message', true);
   
     try {
-      const context = currentMode === 'ia' ? '' : pdfText;
+      const context = currentMode === 'practica3' ? pdfText : '';
       const response = await callGroqAPI(question, context);
       
       // Guardar en el historial
@@ -283,13 +283,19 @@
       chatHistory = []; // Limpiar historial al cambiar de modo
       
       if (currentMode === 'curzas') {
+        mainContent.classList.add('mode-ia');
         addMessage('Sistema: Hola. Soy el Agente de CURZA. Te ayudaré con información sobre la Licenciatura en Gestión de Recursos Humanos.', 'ai-message');
+      } else if (currentMode === 'practica3') {
+        mainContent.classList.remove('mode-ia');
+        addMessage('Sistema: Modo Práctica 3. Puedes subir un documento (ej. solicitud-morales.pdf) a la izquierda y consultarle al Agente de Capacitaciones si aprueba los requisitos.', 'ai-message');
       } else {
+        mainContent.classList.add('mode-ia');
         addMessage('Sistema: Hola. Soy el Agente de Capacitaciones. ¿En qué te puedo ayudar con el trámite?', 'ai-message');
       }
     });
   });
 
+  mainContent.classList.add('mode-ia');
   addMessage('Sistema: Hola. Soy el Agente de Capacitaciones. ¿En qué te puedo ayudar con el trámite?', 'ai-message');
 
   // ===================================================================

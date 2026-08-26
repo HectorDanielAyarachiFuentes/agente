@@ -63,6 +63,14 @@ app.post('/api/chat', async (req, res) => {
                 ...history,
                 { role: "user", content: question }
             ];
+        } else if (mode === 'practica3') {
+            const systemPrompt = systemPromptCapacitaciones;
+            const contextText = context ? `\n\n--- DOCUMENTO ADJUNTO POR EL USUARIO ---\n${context}\n---------------------------------------\n` : "";
+            messages = [
+                { role: "system", content: systemPrompt },
+                ...history,
+                { role: "user", content: question + contextText }
+            ];
         } else {
             // Fallback (IA genérica o antiguo modo)
             const systemPrompt = "Eres un asistente experto.";

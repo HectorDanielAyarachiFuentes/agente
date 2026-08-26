@@ -1,0 +1,13 @@
+codigo,actividad,area,horas,inscriptos,asistieron,certificados
+CAP-2026-01,Introducción a expedientes electrónicos,Administración,20,28,24,22
+CAP-2026-02,Entrevistas por competencias,Recursos Humanos,16,30,27,25
+CAP-2026-03,Redacción administrativa,Administración,24,18,16,14
+CAP-2026-04,Protección de datos personales,Transversal,12,40,33,31
+CAP-2026-05,Atención ciudadana,Atención al público,20,15,14,13
+CAP-2026-06,Tableros de gestión,Gestión,24,25,19,15
+CAP-2026-07,Selección sin sesgos,Recursos Humanos,16,30,26,24
+CAP-2026-08,Compras y contrataciones,Administración,32,20,15,11
+CAP-2026-09,Comunicación accesible,Transversal,12,24,22,21
+CAP-2026-10,Indicadores de capacitación,Recursos Humanos,20,20,13,9
+CAP-2026-11,Operación de plantas de tratamiento,Servicios Sanitarios,160,7,7,6
+CAP-2026-12,Seguridad en espacios confinados,Servicios Sanitarios,24,18,17,16

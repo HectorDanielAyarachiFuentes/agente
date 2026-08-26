@@ -40,7 +40,24 @@ El CURZA, a través del Dpto. de Administración Pública, decidirá la admisió
 
 ---
 
-DOCUMENTO 2: REGLAMENTO GENERAL DE ALUMNOS (INVENTADO - FINES EDUCATIVOS)
+DOCUMENTO 2: PLAN Y CORRELATIVAS GRH.pdf
+UNIVERSIDAD NACIONAL DEL COMAHUE - CENTRO UNIVERSITARIO REGIONAL ZONA ATLÁNTICA
+ORDENANZA UNCo Nº 180/2014 – RESOLUCIÓN CD- CURZA Nº 249/2021
+
+(Misma grilla de asignaturas de 1 a 12 mencionada en Documento 1)
+- 7 Métodos y Técnicas de Intervención Organizacional 1º: 1, 2 y 3 (Rendidas); 4, 5 y 6 (Cursadas)
+- 11 Seminario de Integración y Aplicación 2º: 1,2,3,4,5,6 y 7 (Rendidas)
+Idioma Ingles ANUAL
+
+Ejemplos aclaratorios oficiales:
+a) Para cursar Desarrollo Gerencial y/o Tecnología de Gestión, la condición académica es tener aprobado el cursado de 1, 2 y 3.
+Para Promocionar o rendir Final de Desarrollo Gerencial y/o Tecnología de Gestión, la condición académica es tener aprobados los Finales de 1, 2 y 3.
+b) Para cursar la Materia Métodos y Técnicas de Intervención Organizacional, la condición es tener aprobados los exámenes Finales de 1, 2 y 3 y tener aprobados los cursados de 4, 5 y 6. Esta Materia no se rinde LIBRE.
+c) Para cursar la Materia Seminario de Integración y Aplicación, la condición es tener aprobados los exámenes Finales de 1, 2, 3, 4, 5, 6 y 7. Esta Materia no se rinde LIBRE.
+
+---
+
+DOCUMENTO 3: REGLAMENTO GENERAL DE ALUMNOS (INVENTADO - FINES EDUCATIVOS)
 Art 1. La oferta académica se publica 15 días hábiles antes del inicio del cuatrimestre.
 Art 2. Los horarios están sujetos a disponibilidad de aulas y se confirman la primera semana de clases.
 Art 3. La inscripción a asignaturas se realiza exclusivamente por SIU Guaraní.
@@ -49,4 +66,4 @@ Art 5. El cupo máximo para cada comisión es de 50 alumnos. Si se supera, se as
 Art 6. Para regularizar una materia, se exige 80% de asistencia a clases prácticas y aprobar 2 exámenes parciales (o sus recuperatorios) con nota mínima de 4.
 Art 7. La regularidad tiene una validez de 2 años académicos completos desde el fin de la cursada.
 Art 8. Para rendir final, el alumno debe inscribirse por SIU Guaraní hasta 48 horas hábiles antes de la mesa.
-Art 9. (Correlatividades): Para cursar una materia, basta con tener la condición de alumno regular (cursada aprobada) en las materias correlativas previas, excepto aquellas que en el plan de estudios figuren con "(F)", las cuales exigen tener el examen final aprobado para poder cursar. Sin embargo, para poder rendir el examen final o para promocionar una materia, el alumno debe tener aprobados los exámenes finales de TODAS las correlativas exigidas, sin excepción.
+Art 9. (Correlatividades): Para cursar una materia, basta con tener la condición de alumno regular (cursada aprobada) en las materias correlativas previas, excepto aquellas que en el plan de estudios figuren con "(Rendidas)" o "(F)", las cuales exigen tener el examen final aprobado para poder cursar. Para poder rendir el examen final o para promocionar una materia, el alumno debe tener aprobados los exámenes finales de TODAS las correlativas exigidas, sin excepción.

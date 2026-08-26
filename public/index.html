@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3e%3cdefs%3e%3cstyle%3e.bg %7b fill: %23333333; %7d .stroke %7b stroke: %2329B6F6; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; %7d .accent %7b fill: %2329B6F6; %7d .star %7b fill: %23FFFFFF; %7d%3c/style%3e%3c/defs%3e%3cpath class='bg stroke' d='M20 5 H70 L95 30 V95 H20 Z'/%3e%3cpath class='stroke' fill='none' d='M70 5 V30 H95'/%3e%3ccircle class='accent' cx='50' cy='55' r='28'/%3e%3cpath class='accent' d='M35 83 L50 72 L65 83 Z'/%3e%3cpath class='star' d='M50 42 l 5 10 l 10 5 l -10 5 l -5 10 l -5 -10 l -10 -5 l 10 -5 Z'/%3e%3c/svg%3e">
-  <title>AI PDF Assistant</title>
+  <title>Agente IA</title>
   <link rel="stylesheet" href="./css/style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -28,17 +28,13 @@
           <path d="M10 9H9H8" stroke="url(#logoGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         <div>
-          <h1>AI PDF Assistant</h1>
-          <p>Sube tu archivo PDF y pregunta lo que quieras sobre su contenido</p>
+          <h1>Agente IA</h1>
+          <p>Tu asistente inteligente</p>
         </div>
-      </div>
-      <div class="header-tabs">
-        <button class="tab-btn active" data-mode="pdf">Modo PDF</button>
-        <button class="tab-btn" data-mode="ia">Modo IA</button>
       </div>
     </header>
   
-    <div class="main-content">
+    <div class="main-content mode-ia">
       <div class="left-section">
         <div class="upload-section">
           <label for="pdf-upload" class="upload-label">

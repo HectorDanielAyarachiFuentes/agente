@@ -2,7 +2,7 @@
   
   let pdfText = '';
   let pdfDocument = null;
-  let currentMode = 'pdf';
+  let currentMode = 'ia';
   let chatHistory = [];
   
   const chatMessages = document.getElementById('chat-messages');
@@ -268,35 +268,9 @@
     }
   });
 
-  const tabButtons = document.querySelectorAll('.tab-btn');
   const mainContent = document.querySelector('.main-content');
 
-  tabButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (currentMode === btn.dataset.mode) return;
-
-      tabButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      
-      currentMode = btn.dataset.mode;
-      chatMessages.innerHTML = ''; // Limpiar el chat
-      chatHistory = []; // Limpiar historial al cambiar de modo
-      
-      if (currentMode === 'ia') {
-        mainContent.classList.add('mode-ia');
-        addMessage('Sistema: Has entrado al Modo IA. Puedes chatear libremente.', 'ai-message');
-      } else {
-        mainContent.classList.remove('mode-ia');
-        if (pdfText) {
-          addMessage('Sistema: PDF cargado correctamente. Ya puedes hacer preguntas.', 'ai-message');
-        } else {
-          addMessage('Sistema: ¡Bienvenido! Por favor, carga un PDF para comenzar.', 'ai-message');
-        }
-      }
-    });
-  });
-  
-  addMessage('Sistema: ¡Bienvenido! Por favor, carga un PDF para comenzar.', 'ai-message');
+  addMessage('Sistema: ¡Bienvenido! Soy tu Agente IA. ¿En qué te puedo ayudar?', 'ai-message');
 
   // ===================================================================
   // Lógica del Divisor (Resizer)

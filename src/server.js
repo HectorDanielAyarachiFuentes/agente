@@ -2,10 +2,23 @@
 const express = require('express');
 const fetch = require('node-fetch');
 const path = require('path');
+const fs = require('fs');
 require('dotenv').config(); // Carga la clave desde el archivo .env
 
 const app = express();
 const port = 3000;
+
+// Cargamos las instrucciones y el conocimiento una sola vez al iniciar
+const instruccionesText = fs.readFileSync(path.join(__dirname, '../Asistente_Inscripciones/instrucciones_asistente.txt'), 'utf-8');
+const conocimientoText = fs.readFileSync(path.join(__dirname, '../Asistente_Inscripciones/conocimiento.txt'), 'utf-8');
+const fullSystemPrompt = `
+${instruccionesText}
+
+--- BASE DE CONOCIMIENTO (FUENTES) ---
+Utiliza la siguiente información para responder a las consultas:
+
+${conocimientoText}
+`;
 
 // Middleware para que el servidor entienda JSON y sirva tu index.html
 app.use(express.json());
@@ -25,7 +38,7 @@ app.post('/api/chat', async (req, res) => {
         let messages = [];
 
         if (mode === 'ia') {
-            const systemPrompt = "Eres un asistente de Inteligencia Artificial útil, amigable y con amplios conocimientos. Responde a las preguntas del usuario en español de forma general y abierta, tienes permitido utilizar cualquier información que conozcas.";
+            const systemPrompt = fullSystemPrompt;
             messages = [
                 { role: "system", content: systemPrompt },
                 ...history,

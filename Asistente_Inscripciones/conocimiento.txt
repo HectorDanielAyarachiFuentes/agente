@@ -1,0 +1,103 @@
+--- Documento: acta-comite-2026-08-04.pdf ---
+Acta de reunión · Comité de Capacitación
+Municipalidad de Puerto Norte · 4 de agosto de 2026 · Acta N.º 07/2026
+En la ciudad de Puerto Norte, a los cuatro días del mes de agosto de 2026, se reúne el Comité de Capacitación  
+con la presencia de la Dirección de Recursos Humanos, la Secretaría de Servicios Sanitarios, la Secretaría de  
+Administración y la representación gremial.
+Punto 1 · Oferta del segundo semestre
+Se aprueba la oferta del segundo semestre, integrada por doce actividades. Se deja constancia de que dos de  
+ellas se dictarán por primera vez y requieren evaluación de resultados al cierre.
+Punto 2 · Plazo de inscripción del llamado LL-2026-14
+Atento a la superposición del período de inscripción con el receso administrativo, se resuelve  extender a 
+quince (15) días hábiles  el plazo de inscripción correspondiente al llamado LL-2026-14, por única vez y sin  
+que ello importe modificación del reglamento vigente.
+Punto 3 · Relevamiento de demanda insatisfecha
+Se encomienda a la Dirección de Recursos Humanos relevar la demanda no cubierta durante el primer semestre  
+y elevar un informe antes del 30 de septiembre.
+Punto 4 · Licencias por capacitación
+Se posterga el tratamiento del régimen de licencias por capacitación para la próxima reunión, por requerir  
+dictamen previo del área legal.
+Sin más asuntos que tratar, se levanta la reunión.
+Documento ficticio preparado con fines educativos.
+
+
+--- Documento: manual-inscripciones.pdf ---
+Manual de procedimiento · Inscripciones a capacitación
+Municipalidad de Puerto Norte · Dirección de Recursos Humanos · Versión 3
+1. Publicación del llamado
+1.El área solicitante remite la propuesta con denominación, carga horaria, modalidad y destinatarios.  
+2.La Dirección verifica que la actividad esté prevista en la oferta anual.  
+3.Se publica el llamado en la intranet y se difunde por correo institucional.  
+2. Recepción de inscripciones
+1.Las inscripciones ingresan únicamente por el formulario publicado. 
+2.La Dirección descarga las respuestas al cierre del plazo y las vuelca al registro provisorio.  
+3.Se verifica que cada persona reúna la antigüedad exigida. 
+3. Asignación de vacantes
+1.Si las inscripciones no superan el cupo máximo, se admiten todas. 
+2.Si lo superan, se ordena por antigüedad y se conforma una lista de espera.  
+3.La lista de espera se comunica junto con la nómina de admitidos. 
+4. Durante el dictado
+1.Quien dicta la actividad registra la asistencia por encuentro. 
+2.Las planillas de asistencia se remiten dentro de los cinco días de finalizada la actividad.  
+3.Las bajas comunicadas en término liberan la vacante a la primera persona de la lista de espera.  
+5. Certificación
+1.La Dirección cruza asistencia y evaluación contra los requisitos del reglamento.  
+2.Emite los certificados y los asienta en el Registro Único de Capacitación.  
+3.Comunica a cada área la nómina de personas certificadas. 
+Documento ficticio preparado con fines educativos.
+
+
+--- Documento: registro-capacitaciones.csv.txt ---
+codigo,actividad,area,horas,inscriptos,asistieron,certificados
+CAP-2026-01,Introducción a expedientes electrónicos,Administración,20,28,24,22
+CAP-2026-02,Entrevistas por competencias,Recursos Humanos,16,30,27,25
+CAP-2026-03,Redacción administrativa,Administración,24,18,16,14
+CAP-2026-04,Protección de datos personales,Transversal,12,40,33,31
+CAP-2026-05,Atención ciudadana,Atención al público,20,15,14,13
+CAP-2026-06,Tableros de gestión,Gestión,24,25,19,15
+CAP-2026-07,Selección sin sesgos,Recursos Humanos,16,30,26,24
+CAP-2026-08,Compras y contrataciones,Administración,32,20,15,11
+CAP-2026-09,Comunicación accesible,Transversal,12,24,22,21
+CAP-2026-10,Indicadores de capacitación,Recursos Humanos,20,20,13,9
+CAP-2026-11,Operación de plantas de tratamiento,Servicios Sanitarios,160,7,7,6
+CAP-2026-12,Seguridad en espacios confinados,Servicios Sanitarios,24,18,17,16
+
+
+
+--- Documento: reglamento-capacitacion.pdf ---
+Reglamento del Programa Anual de Capacitación
+Municipalidad de Puerto Norte · Dirección de Recursos Humanos
+Aprobado por Resolución 088/2026
+Artículo 1. Objeto. El presente reglamento regula el Programa Anual de Capacitación del personal municipal,  
+su oferta, la inscripción, la asistencia, la evaluación y la certificación.
+Artículo  2. Alcance. Alcanza  a  todas  las  actividades  de  capacitación  organizadas  o  reconocidas  por  la  
+Municipalidad, sean presenciales, virtuales o mixtas.
+Artículo 3. Autoridad de aplicación.  La Dirección de Recursos Humanos es la autoridad de aplicación. Le  
+corresponde aprobar la oferta, resolver las inscripciones y emitir las certificaciones.
+Artículo  4. Personas  comprendidas.  Puede  inscribirse  el  personal  de  planta  permanente  y  el  personal  
+contratado con una antigüedad mínima de seis meses en el organismo.
+Artículo 5. Oferta anual. La oferta se publica dos veces al año, en marzo y en agosto, con la denominación de  
+cada actividad, su carga horaria, su modalidad y sus destinatarios.
+Artículo 6. Inscripción. La inscripción se realiza mediante el formulario que la Dirección publique para cada  
+llamado. No se admiten inscripciones por otra vía.
+Artículo 7. Cupos. Cada actividad tiene un cupo mínimo de ocho personas y un cupo máximo de treinta.  
+Cuando las inscripciones superen el cupo, se prioriza por antigüedad en el organismo y, en caso de igualdad,  
+por orden de inscripción.
+Artículo 8. Asistencia. Para acceder a la certificación se requiere una asistencia no inferior al setenta y cinco  
+por ciento (75 %) de las horas de la actividad. La asistencia se registra por encuentro y es responsabilidad de  
+quien dicta la actividad.
+Artículo 9. Evaluación. Las actividades que lo prevean incluyen una instancia de evaluación. Su aprobación es  
+condición para la certificación, además del requisito de asistencia.
+Artículo  10. Certificación. La  Dirección  de  Recursos  Humanos  emite  el  certificado,  que  consigna  la  
+denominación de la actividad, la carga horaria en horas reloj, el período de dictado y el número de expediente.
+Artículo 11. Registro. Todas las certificaciones se asientan en el Registro Único de Capacitación, que la  
+Dirección mantiene actualizado y pone a disposición de las áreas.
+Artículo 12. Plazo de inscripción.  El plazo de inscripción es de diez (10) días hábiles contados desde la  
+publicación del llamado. Vencido el plazo no se admiten nuevas inscripciones.
+Artículo 13. Bajas. La baja debe comunicarse por escrito con una antelación no menor a dos días hábiles del  
+inicio de la actividad. La baja sin aviso se registra como inasistencia.
+Artículo 14. Suspensión. La Dirección puede suspender una actividad cuando no se alcance el cupo mínimo.  
+La suspensión se comunica a las personas inscriptas dentro de los dos días hábiles.
+Artículo 15. Vigencia. El presente reglamento rige a partir de su publicación y deja sin efecto las disposiciones  
+anteriores sobre la materia.
+Documento ficticio preparado con fines educativos.

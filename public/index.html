@@ -193,14 +193,11 @@
             <div class="gemini-prompt-box">
               
               <!-- Botón Plus / Herramientas -->
-              <button class="gemini-plus-btn" id="voice-toggle-btn" title="Voz IA Activada / Desactivada">
-                <svg class="plus-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <button class="gemini-plus-btn" id="plus-btn" title="Opciones y herramientas rápidas">
+                <svg class="plus-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
-                <div class="audio-equalizer">
-                  <span></span><span></span><span></span>
-                </div>
               </button>
 
               <!-- Input de Texto Principal -->
@@ -208,12 +205,36 @@
                 <input type="text" id="question-input" placeholder="Pregunta al asistente o escribe tu consulta..." autocomplete="off" />
               </div>
 
-              <!-- Herramientas Derecha: Pill de Modelo Flash + Micrófono + Botón Enviar -->
+              <!-- Herramientas Derecha: Pill de Modelo + Voz + Micrófono + Botón Enviar -->
               <div class="prompt-tools-right">
                 <div class="gemini-model-badge" title="Modelo de IA activo">
                   <span>Flash</span>
                   <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
                 </div>
+
+                <!-- Botón de Control de Lectura por Voz (Altavoz / Detener) -->
+                <button id="voice-toggle-btn" class="prompt-tool-btn voice-btn active" title="Lectura por voz activada (Clic para silenciar)">
+                  <!-- Icono Altavoz Activado -->
+                  <svg class="speaker-icon speaker-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                  </svg>
+                  <!-- Icono Altavoz Silenciado -->
+                  <svg class="speaker-icon speaker-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <line x1="23" y1="9" x2="17" y2="15"></line>
+                    <line x1="17" y1="9" x2="23" y2="15"></line>
+                  </svg>
+                  <!-- Ecualizador Animado cuando está hablando -->
+                  <div class="audio-equalizer-bars">
+                    <span></span><span></span><span></span><span></span>
+                  </div>
+                  <!-- Icono Stop cuando se pasa el cursor mientras reproduce voz -->
+                  <svg class="speaker-icon speaker-stop" viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="6" y="6" width="12" height="12" rx="2.5"></rect>
+                  </svg>
+                </button>
 
                 <!-- Botón de Micrófono -->
                 <button id="mic-toggle-btn" class="prompt-tool-btn" title="Activar Reconocimiento de Voz">

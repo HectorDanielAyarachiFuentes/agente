@@ -83,6 +83,40 @@ const agentModeBadge = document.getElementById('agent-mode-badge');
 const voiceManager = new VoiceManager();
 const voiceToggleBtn = document.getElementById('voice-toggle-btn');
 const micToggleBtn = document.getElementById('mic-toggle-btn');
+const plusBtn = document.getElementById('plus-btn');
+
+let currentSpeakingBtn = null;
+
+function updateVoiceButtonState() {
+  if (voiceManager.isSpeaking) {
+    voiceToggleBtn.classList.add('speaking');
+    voiceToggleBtn.title = "Reproduciendo respuesta... Clic para detener sonido (⏹)";
+  } else {
+    voiceToggleBtn.classList.remove('speaking');
+    if (voiceManager.isVoiceEnabled) {
+      voiceToggleBtn.classList.add('active');
+      voiceToggleBtn.title = "Lectura por voz activada (Clic para silenciar)";
+    } else {
+      voiceToggleBtn.classList.remove('active');
+      voiceToggleBtn.title = "Lectura por voz desactivada (Clic para activar)";
+    }
+  }
+}
+
+function resetAllSpeakButtons() {
+  document.querySelectorAll('.speak-btn').forEach(btn => {
+    btn.classList.remove('speaking');
+    btn.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+      </svg>
+      <span>Escuchar</span>
+    `;
+    btn.title = "Escuchar respuesta";
+  });
+  currentSpeakingBtn = null;
+}
 
 voiceManager.onMicResult = (finalTranscript, interimTranscript) => {
   questionInput.value = finalTranscript || interimTranscript;
@@ -93,20 +127,21 @@ voiceManager.onMicEnd = () => {
 };
 
 voiceManager.onSpeakStart = () => {
-  voiceToggleBtn.classList.add('speaking');
+  updateVoiceButtonState();
 };
 
 voiceManager.onSpeakEnd = () => {
-  voiceToggleBtn.classList.remove('speaking');
+  updateVoiceButtonState();
+  resetAllSpeakButtons();
 };
 
 voiceToggleBtn.addEventListener('click', () => {
-  const isEnabled = voiceManager.toggleVoice();
-  if (isEnabled) {
-    voiceToggleBtn.classList.add('active');
+  if (voiceManager.isSpeaking) {
+    voiceManager.stopSpeaking();
+    resetAllSpeakButtons();
   } else {
-    voiceToggleBtn.classList.remove('active');
-    voiceToggleBtn.classList.remove('speaking');
+    const isEnabled = voiceManager.toggleVoice();
+    updateVoiceButtonState();
   }
 });
 
@@ -118,6 +153,12 @@ micToggleBtn.addEventListener('click', () => {
     micToggleBtn.classList.remove('active');
   }
 });
+
+if (plusBtn) {
+  plusBtn.addEventListener('click', () => {
+    questionInput.focus();
+  });
+}
 
 // ===================================================================
 // Renderizado de la Pantalla de Bienvenida (Hero Card)
@@ -238,10 +279,25 @@ function updateAiMessage(thinkingWrapper, markdownResponse) {
     });
   });
 
-  // Escuchar mensaje
+  // Escuchar / Detener audio del mensaje
   const speakBtn = bubble.querySelector('.speak-btn');
   speakBtn.addEventListener('click', () => {
-    voiceManager.speak(markdownResponse);
+    if (voiceManager.isSpeaking && currentSpeakingBtn === speakBtn) {
+      voiceManager.stopSpeaking();
+      resetAllSpeakButtons();
+    } else {
+      resetAllSpeakButtons();
+      currentSpeakingBtn = speakBtn;
+      speakBtn.classList.add('speaking');
+      speakBtn.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <rect x="6" y="6" width="12" height="12" rx="2"></rect>
+        </svg>
+        <span>Detener audio</span>
+      `;
+      speakBtn.title = "Detener reproducción de audio";
+      voiceManager.speak(markdownResponse);
+    }
   });
 
   thinkingWrapper.classList.remove('thinking-wrapper');

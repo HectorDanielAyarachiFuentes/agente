@@ -1006,6 +1006,23 @@ input[type="file"] {
   border-color: var(--accent-1);
 }
 
+.msg-act-btn.speaking {
+  background: rgba(234, 67, 53, 0.15);
+  border-color: rgba(234, 67, 53, 0.4);
+  color: #ea4335;
+  animation: pulseStopBtn 1.5s infinite ease-in-out;
+}
+
+.msg-act-btn.speaking:hover {
+  background: rgba(234, 67, 53, 0.28);
+  border-color: #ea4335;
+}
+
+@keyframes pulseStopBtn {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(234, 67, 53, 0.4); }
+  50% { box-shadow: 0 0 8px 1px rgba(234, 67, 53, 0.35); }
+}
+
 .msg-act-btn svg {
   width: 13px;
   height: 13px;
@@ -1145,7 +1162,7 @@ input[type="file"] {
   align-items: center;
   justify-content: center;
   background: transparent;
-  border: none;
+  border: 1px solid transparent;
   color: var(--text-muted);
   cursor: pointer;
   transition: all 0.2s ease;
@@ -1155,46 +1172,131 @@ input[type="file"] {
 .gemini-plus-btn:hover {
   background: rgba(255, 255, 255, 0.08);
   color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .gemini-plus-btn .plus-icon {
+  width: 19px;
+  height: 19px;
+}
+
+/* ===================================================================
+   Botón de Lectura por Voz (TTS) y Estados de Reproducción
+   =================================================================== */
+.voice-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
+  flex-shrink: 0;
+}
+
+.voice-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.voice-btn .speaker-icon {
   width: 18px;
   height: 18px;
 }
 
-.gemini-plus-btn.active {
-  color: var(--accent-1);
+.voice-btn .speaker-on,
+.voice-btn .speaker-stop {
+  display: none;
 }
 
-/* Ecualizador Animado */
-.audio-equalizer {
+.voice-btn .speaker-off {
+  display: block;
+}
+
+/* Estado: Voz Activada en reposo */
+.voice-btn.active {
+  color: #8ab4f8;
+}
+
+.voice-btn.active .speaker-on {
+  display: block;
+}
+
+.voice-btn.active .speaker-off {
+  display: none;
+}
+
+/* Ecualizador Animado de Voz */
+.audio-equalizer-bars {
   display: none;
   align-items: flex-end;
-  gap: 2px;
-  height: 12px;
-  position: absolute;
-  bottom: 6px;
-  right: 6px;
+  justify-content: center;
+  gap: 2.5px;
+  height: 16px;
+  width: 16px;
 }
 
-.audio-equalizer span {
-  width: 2px;
-  background: var(--accent-1);
-  border-radius: 1px;
-  animation: eqBars 0.8s ease infinite alternate;
+.audio-equalizer-bars span {
+  width: 2.5px;
+  background: linear-gradient(180deg, #4285f4, #8ab4f8);
+  border-radius: 2px;
+  animation: eqVoiceBar 0.7s ease-in-out infinite alternate;
 }
 
-.audio-equalizer span:nth-child(1) { height: 3px; animation-delay: 0.1s; }
-.audio-equalizer span:nth-child(2) { height: 9px; animation-delay: 0.3s; }
-.audio-equalizer span:nth-child(3) { height: 5px; animation-delay: 0.2s; }
+.audio-equalizer-bars span:nth-child(1) { height: 5px; animation-delay: 0.05s; }
+.audio-equalizer-bars span:nth-child(2) { height: 15px; animation-delay: 0.25s; }
+.audio-equalizer-bars span:nth-child(3) { height: 10px; animation-delay: 0.4s; }
+.audio-equalizer-bars span:nth-child(4) { height: 7px; animation-delay: 0.15s; }
 
-@keyframes eqBars {
-  0% { height: 2px; }
-  100% { height: 12px; }
+@keyframes eqVoiceBar {
+  0% { height: 3px; }
+  100% { height: 15px; }
 }
 
-.gemini-plus-btn.speaking .audio-equalizer {
+/* Estado: Reproduciendo Voz (Speaking) */
+.voice-btn.speaking {
+  background: rgba(66, 133, 244, 0.18);
+  border-color: rgba(66, 133, 244, 0.45);
+  color: #8ab4f8;
+  box-shadow: 0 0 14px rgba(66, 133, 244, 0.4);
+  animation: voiceGlowPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes voiceGlowPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(66, 133, 244, 0.25); }
+  50% { box-shadow: 0 0 16px rgba(66, 133, 244, 0.6); }
+}
+
+.voice-btn.speaking .speaker-on,
+.voice-btn.speaking .speaker-off {
+  display: none !important;
+}
+
+.voice-btn.speaking .audio-equalizer-bars {
   display: flex;
+}
+
+/* Hover mientras habla: Mostrar botón de Parar / Mute */
+.voice-btn.speaking:hover {
+  background: rgba(234, 67, 53, 0.22);
+  border-color: rgba(234, 67, 53, 0.6);
+  color: #ea4335;
+  box-shadow: 0 0 14px rgba(234, 67, 53, 0.45);
+}
+
+.voice-btn.speaking:hover .audio-equalizer-bars {
+  display: none;
+}
+
+.voice-btn.speaking:hover .speaker-stop {
+  display: block;
+  width: 14px;
+  height: 14px;
 }
 
 .prompt-input-wrapper {

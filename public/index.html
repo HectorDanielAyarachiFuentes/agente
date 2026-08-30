@@ -6,12 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Plataforma de Agentes IA Inteligentes</title>
   
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3e%3cdefs%3e%3clinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3e%3cstop offset='0%25' stop-color='%2338bdf8'/%3e%3cstop offset='100%25' stop-color='%23818cf8'/%3e%3c/linearGradient%3e%3c/defs%3e%3ccircle cx='50' cy='50' r='45' fill='url(%23g)'/%3e%3cpath d='M30 52 L45 67 L72 35' fill='none' stroke='white' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3e%3cdefs%3e%3clinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3e%3cstop offset='0%25' stop-color='%234285F4'/%3e%3cstop offset='50%25' stop-color='%239B72CB'/%3e%3cstop offset='100%25' stop-color='%23D96570'/%3e%3c/linearGradient%3e%3c/defs%3e%3cpath d='M12 2C12 7.52 7.52 12 2 12C7.52 12 12 16.48 12 22C12 16.48 16.48 12 22 12C16.48 12 12 7.52 12 2Z' fill='url(%23g)'/%3e%3c/svg%3e">
   
-  <!-- Tipografía moderna -->
+  <!-- Tipografía moderna Google / Gemini -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- Estilos -->
   <link rel="stylesheet" href="./css/style.css">
@@ -21,208 +21,267 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body data-agent="capacitaciones">
-  <div class="app-background-glow glow-1"></div>
-  <div class="app-background-glow glow-2"></div>
+  <div class="gemini-ambient-bg"></div>
 
-  <div class="container">
-    <!-- Header Principal -->
-    <header class="header">
-      <div class="header-left">
-        <div class="app-logo-wrapper">
-          <div class="app-logo-glow"></div>
-          <svg class="app-logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Contenedor Principal de la App (Gemini Shell) -->
+  <div class="gemini-app-shell">
+    
+    <!-- 1. Barra Lateral de Iconos (Gemini Left Rail) -->
+    <aside class="gemini-sidebar-rail" aria-label="Navegación principal">
+      <div class="rail-top">
+        <div class="rail-logo-btn" title="Gemini IA - Nexus IA">
+          <svg class="gemini-star-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="geminiStarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#4285F4" />
+                <stop offset="35%" stop-color="#9B72CB" />
+                <stop offset="70%" stop-color="#D96570" />
+                <stop offset="100%" stop-color="#00E5FF" />
+              </linearGradient>
+            </defs>
+            <path d="M12 2C12 7.52 7.52 12 2 12C7.52 12 12 16.48 12 22C12 16.48 16.48 12 22 12C16.48 12 12 7.52 12 2Z" fill="url(#geminiStarGrad)"/>
           </svg>
         </div>
-        <div class="header-titles">
-          <div class="brand-line">
-            <h1>Nexus IA</h1>
-            <span class="badge-status">
-              <span class="status-dot pulse"></span>
-              Ultra Fast AI
-            </span>
-          </div>
-          <p class="subtitle">Asistentes Virtuales Especializados</p>
+
+        <!-- Botones de Navegación Rápida / Agentes -->
+        <div class="rail-nav-group">
+          <button class="rail-btn agent-tab active" data-mode="capacitaciones" id="tab-capacitaciones" title="Agente Capacitaciones (Actividad sincrónica 3)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            <span class="rail-tooltip">Agente Capacitaciones (Actividad sincrónica 3)</span>
+          </button>
+          <button class="rail-btn agent-tab" data-mode="curzas" id="tab-curzas" title="IA Curzas (Actividad asincrónica 3)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="21" x2="21" y2="21"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="5 6 12 3 19 6"/><line x1="4" y1="10" x2="4" y2="21"/><line x1="20" y1="10" x2="20" y2="21"/><line x1="8" y1="14" x2="8" y2="17"/><line x1="12" y1="14" x2="12" y2="17"/><line x1="16" y1="14" x2="16" y2="17"/></svg>
+            <span class="rail-tooltip">IA Curzas (Actividad asincrónica 3)</span>
+          </button>
+          <button class="rail-btn agent-tab" data-mode="practica3" id="tab-practica3" title="Práctica 3 (Subir PDF)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span class="rail-tooltip">Práctica 3 (Subir PDF)</span>
+          </button>
         </div>
       </div>
 
-      <!-- Selector de Agentes Tipo Segmented Tabs -->
-      <nav class="agent-nav" aria-label="Selección de Asistente">
-        <button class="agent-tab active" data-mode="capacitaciones" id="tab-capacitaciones">
-          <span class="tab-icon">🎓</span>
-          <div class="tab-text">
-            <span class="tab-title">Agente Capacitaciones</span>
-            <span class="tab-sub">(Actividad sincrónica 3)</span>
-          </div>
+      <!-- Iconos Inferiores del Rail -->
+      <div class="rail-bottom">
+        <button class="rail-btn" id="rail-settings-btn" title="Configuración de Asistentes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span class="rail-tooltip">Ajustes</span>
         </button>
-        <button class="agent-tab" data-mode="curzas" id="tab-curzas">
-          <span class="tab-icon">🏛️</span>
-          <div class="tab-text">
-            <span class="tab-title">IA Curzas</span>
-            <span class="tab-sub">(Actividad asincrónica 3)</span>
-          </div>
-        </button>
-        <button class="agent-tab" data-mode="practica3" id="tab-practica3">
-          <span class="tab-icon">📑</span>
-          <div class="tab-text">
-            <span class="tab-title">Práctica 3</span>
-            <span class="tab-sub">(Subir PDF)</span>
-          </div>
-        </button>
-      </nav>
-
-      <!-- Utilidades de Chat -->
-      <div class="header-actions">
-        <button id="clear-chat-btn" class="util-btn" title="Limpiar conversación actual" aria-label="Limpiar chat">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 6h18m-2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-          </svg>
-          <span class="btn-tooltip">Limpiar Chat</span>
-        </button>
-        <button id="export-chat-btn" class="util-btn" title="Exportar historial a Markdown" aria-label="Exportar chat">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-          <span class="btn-tooltip">Exportar Chat</span>
-        </button>
+        <div class="rail-user-avatar" title="Usuario Nexus">
+          <div class="avatar-circle">🧑‍💻</div>
+        </div>
       </div>
-    </header>
-  
-    <!-- Contenido Principal -->
-    <div class="main-content mode-ia">
-      <!-- Panel Izquierdo: Workspace de PDF (Activo en modo PDF) -->
-      <div class="left-section">
-        <div class="pdf-header-bar">
-          <div class="pdf-file-info" id="pdf-file-info">
-            <svg class="pdf-file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-              <polyline points="10 9 9 9 8 9"></polyline>
-            </svg>
-            <span id="pdf-filename">Ningún archivo cargado</span>
-          </div>
-          <div class="pdf-controls" id="pdf-controls">
-            <button id="zoom-out-btn" class="pdf-ctrl-btn" title="Alejar">-</button>
-            <span id="zoom-level">100%</span>
-            <button id="zoom-in-btn" class="pdf-ctrl-btn" title="Acercar">+</button>
-            <label for="pdf-upload" class="pdf-ctrl-btn change-pdf-btn" title="Cargar otro PDF">
-              Cambiar
-            </label>
+    </aside>
+
+    <!-- 2. Área de Trabajo Principal (Gemini Main Canvas) -->
+    <main class="gemini-main-canvas">
+      
+      <!-- Barra Superior Gemini Minimalista -->
+      <header class="gemini-top-bar">
+        <div class="top-bar-left">
+          <div class="header-titles">
+            <div class="brand-line">
+              <h1>Nexus IA</h1>
+              <span class="badge-status">
+                <span class="status-dot pulse"></span>
+                Ultra Fast AI
+              </span>
+            </div>
+            <p class="subtitle">Asistentes Virtuales Especializados</p>
           </div>
         </div>
 
-        <div class="upload-section" id="drop-zone">
-          <label for="pdf-upload" class="upload-label">
-            <div class="upload-icon-ring">
-              <svg class="upload-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
+        <!-- Selector Segmented en Barra Superior para selección rápida -->
+        <nav class="agent-nav" aria-label="Selección de Asistente">
+          <button class="agent-tab active" data-mode="capacitaciones">
+            <span class="tab-icon">🎓</span>
+            <div class="tab-text">
+              <span class="tab-title">Agente Capacitaciones</span>
+              <span class="tab-sub">(Actividad sincrónica 3)</span>
             </div>
-            <div class="upload-text-group">
-              <span class="upload-title">Arrastra tu PDF aquí o haz click</span>
-              <span class="upload-subtitle">Soporta solicitudes, actas, reglamentos (Máx. 25MB)</span>
+          </button>
+          <button class="agent-tab" data-mode="curzas">
+            <span class="tab-icon">🏛️</span>
+            <div class="tab-text">
+              <span class="tab-title">IA Curzas</span>
+              <span class="tab-sub">(Actividad asincrónica 3)</span>
             </div>
-          </label>
-          <input type="file" id="pdf-upload" accept=".pdf" />
+          </button>
+          <button class="agent-tab" data-mode="practica3">
+            <span class="tab-icon">📑</span>
+            <div class="tab-text">
+              <span class="tab-title">Práctica 3</span>
+              <span class="tab-sub">(Subir PDF)</span>
+            </div>
+          </button>
+        </nav>
+
+        <!-- Botones de Acción Superiores (Estilo Botón Azul Gemini "Cambiar a plan superior") -->
+        <div class="top-bar-right">
+          <div class="gemini-upgrade-btn" title="Modo Ultra Activo">
+            <svg class="upgrade-sparkle" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"/></svg>
+            <span>Cambiar a plan superior</span>
+          </div>
           
-          <div class="search-section">
-            <div class="search-input-wrapper">
-              <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
-                <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <div class="header-actions">
+            <button id="clear-chat-btn" class="util-btn" title="Limpiar conversación actual" aria-label="Limpiar chat">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18m-2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
               </svg>
-              <input type="text" id="search-input" placeholder="Buscar texto en el PDF..." />
-            </div>
-            <button id="search-button">Buscar</button>
+              <span class="btn-tooltip">Limpiar Chat</span>
+            </button>
+            <button id="export-chat-btn" class="util-btn" title="Exportar historial a Markdown" aria-label="Exportar chat">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span class="btn-tooltip">Exportar Chat</span>
+            </button>
           </div>
         </div>
+      </header>
 
-        <div id="pdf-preview" class="pdf-preview">
-          <div id="pdf-content" class="pdf-content"></div>
+      <!-- Contenido Principal: Workspace Dividido o Modo IA Completo -->
+      <div class="main-content mode-ia">
+        <!-- Panel Izquierdo: Workspace de PDF (Activo en modo PDF) -->
+        <div class="left-section">
+          <div class="pdf-header-bar">
+            <div class="pdf-file-info" id="pdf-file-info">
+              <svg class="pdf-file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <span id="pdf-filename">Ningún archivo cargado</span>
+            </div>
+            <div class="pdf-controls" id="pdf-controls">
+              <button id="zoom-out-btn" class="pdf-ctrl-btn" title="Alejar">-</button>
+              <span id="zoom-level">100%</span>
+              <button id="zoom-in-btn" class="pdf-ctrl-btn" title="Acercar">+</button>
+              <label for="pdf-upload" class="pdf-ctrl-btn change-pdf-btn" title="Cargar otro PDF">
+                Cambiar
+              </label>
+            </div>
+          </div>
+
+          <div class="upload-section" id="drop-zone">
+            <label for="pdf-upload" class="upload-label">
+              <div class="upload-icon-ring">
+                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="upload-text-group">
+                <span class="upload-title">Arrastra tu PDF aquí o haz click</span>
+                <span class="upload-subtitle">Soporta solicitudes, actas, reglamentos (Máx. 25MB)</span>
+              </div>
+            </label>
+            <input type="file" id="pdf-upload" accept=".pdf" />
+            
+            <div class="search-section">
+              <div class="search-input-wrapper">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                  <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <input type="text" id="search-input" placeholder="Buscar texto en el PDF..." />
+              </div>
+              <button id="search-button">Buscar</button>
+            </div>
+          </div>
+
+          <div id="pdf-preview" class="pdf-preview">
+            <div id="pdf-content" class="pdf-content"></div>
+          </div>
         </div>
-      </div>
-  
-      <!-- Divisor Redimensionable -->
-      <div class="resizer" id="dragMe" title="Arrastrar para redimensionar">
-        <div class="resizer-handle"></div>
-      </div>
+    
+        <!-- Divisor Redimensionable -->
+        <div class="resizer" id="dragMe" title="Arrastrar para redimensionar">
+          <div class="resizer-handle"></div>
+        </div>
 
-      <!-- Panel Derecho: Chat Interactivo del Asistente -->
-      <section class="chat-section">
-        <!-- Sub-barra del Agente Activo -->
-        <div class="chat-header-bar">
-          <div class="agent-info-bar">
-            <div class="agent-avatar-badge" id="agent-avatar-icon">🎓</div>
-            <div>
-              <h2 id="agent-active-title">Agente de Capacitaciones</h2>
-              <div class="agent-sub-status">
-                <span class="status-indicator"></span>
-                <span id="agent-active-desc">Municipalidad de Puerto Norte • Reglamento v2026</span>
+        <!-- Panel Derecho: Chat Interactivo del Asistente -->
+        <section class="chat-section">
+          <!-- Sub-barra del Agente Activo -->
+          <div class="chat-header-bar">
+            <div class="agent-info-bar">
+              <div class="agent-avatar-badge" id="agent-avatar-icon">🎓</div>
+              <div>
+                <h2 id="agent-active-title">Agente de Capacitaciones</h2>
+                <div class="agent-sub-status">
+                  <span class="status-indicator"></span>
+                  <span id="agent-active-desc">Municipalidad de Puerto Norte • Reglamento v2026</span>
+                </div>
               </div>
             </div>
+            <div class="chat-header-badges">
+              <span class="badge-pill" id="agent-mode-badge">Modo Asesor</span>
+            </div>
           </div>
-          <div class="chat-header-badges">
-            <span class="badge-pill" id="agent-mode-badge">Modo Asesor</span>
+
+          <!-- Área Central de Mensajes de Conversación -->
+          <div class="chat-messages-container">
+            <div id="chat-messages" class="chat-messages"></div>
           </div>
-        </div>
 
-        <!-- Área de Mensajes -->
-        <div id="chat-messages" class="chat-messages"></div>
-
-        <!-- Barra de Entrada Flotante -->
-        <div class="input-section-wrapper">
-          <div class="input-section">
-            <div class="input-tools">
-              <!-- Botón de Voz / Altavoz -->
-              <button id="voice-toggle-btn" class="icon-btn active" title="Voz IA Activada (Click para silenciar)">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="speaker-icon">
-                  <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path class="voice-waves wave-1" d="M15.54 8.46C16.4774 9.39764 17.004 10.6692 17.004 11.995C17.004 13.3208 16.4774 14.5924 15.54 15.53" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  <path class="voice-waves wave-2" d="M19.07 4.93C20.9447 6.80527 21.9979 9.34836 21.9979 12C21.9979 14.6516 20.9447 17.1947 19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <!-- Barra de Entrada Flotante Estilo Cápsula Oficial Gemini -->
+          <div class="input-section-wrapper">
+            <div class="gemini-prompt-box">
+              
+              <!-- Botón Plus / Herramientas -->
+              <button class="gemini-plus-btn" id="voice-toggle-btn" title="Voz IA Activada / Desactivada">
+                <svg class="plus-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
                 </svg>
                 <div class="audio-equalizer">
                   <span></span><span></span><span></span>
                 </div>
               </button>
 
-              <!-- Botón de Micrófono -->
-              <button id="mic-toggle-btn" class="icon-btn" title="Activar Reconocimiento de Voz">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="mic-icon">
-                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span class="mic-pulse-ring"></span>
-              </button>
-            </div>
+              <!-- Input de Texto Principal -->
+              <div class="prompt-input-wrapper">
+                <input type="text" id="question-input" placeholder="Pregunta al asistente o escribe tu consulta..." autocomplete="off" />
+              </div>
 
-            <!-- Input de Pregunta -->
-            <div class="input-field-container">
-              <input type="text" id="question-input" placeholder="Haz tu pregunta al asistente..." autocomplete="off" />
-            </div>
+              <!-- Herramientas Derecha: Pill de Modelo Flash + Micrófono + Botón Enviar -->
+              <div class="prompt-tools-right">
+                <div class="gemini-model-badge" title="Modelo de IA activo">
+                  <span>Flash</span>
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
+                </div>
 
-            <!-- Botón de Envío -->
-            <button id="send-button" class="send-btn" title="Enviar pregunta (Enter)">
-              <span>Enviar</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-            </button>
+                <!-- Botón de Micrófono -->
+                <button id="mic-toggle-btn" class="prompt-tool-btn" title="Activar Reconocimiento de Voz">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="mic-icon">
+                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span class="mic-pulse-ring"></span>
+                </button>
+
+                <!-- Botón de Envío -->
+                <button id="send-button" class="prompt-send-btn" title="Enviar pregunta (Enter)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                </button>
+              </div>
+
+            </div>
+            
+            <div class="gemini-input-disclaimer">
+              <span>Nexus IA puede mostrar información imprecisa. Verifica las respuestas importantes.</span>
+            </div>
           </div>
-          <div class="input-footer-hint">
-            <span>💡 Atajo: Presiona <strong>Enter ↵</strong> para enviar</span>
-          </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </main>
   </div>
   
   <script src="./js/modules/voice.js"></script>

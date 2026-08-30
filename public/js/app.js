@@ -20,10 +20,10 @@ const AGENTS_CONFIG = {
     badge: 'Actividad Sincrónica 3 • Reglamento v2026',
     placeholder: 'Pregunta sobre convocatorias, requisitos de antigüedad, cupos o certificados...',
     chips: [
-      '¿Cuáles son los requisitos de antigüedad para inscribirme?',
-      '¿Qué pasa si las inscripciones superan el cupo máximo?',
+      '¿Cuáles son los requisitos de antigüedad y situación de revista para inscribirme?',
+      '¿Qué cupo tienen las actividades y cómo se asignan las vacantes si se supera el máximo?',
       '¿Qué porcentaje de asistencia necesito para poder certificar?',
-      '¿Cómo y con cuánta antelación debo solicitar una baja?'
+      '¿Cómo y con cuánta antelación debo solicitar una baja a un curso?'
     ]
   },
   curzas: {
@@ -33,10 +33,10 @@ const AGENTS_CONFIG = {
     badge: 'Actividad Asincrónica 3 • Plan Oficial',
     placeholder: 'Pregunta sobre materias, correlativas para cursar o finales...',
     chips: [
-      '¿Cuáles son las materias del plan de estudios de la carrera?',
-      '¿Qué correlativas necesito para cursar Gestión de las Personas?',
-      '¿Cuál es el requisito de asistencia y notas para regularizar?',
-      '¿Cuánto tiempo dura la regularidad para rendir un examen final?'
+      '¿Cuáles son las materias del plan de estudios de la Licenciatura?',
+      '¿Qué correlativas necesito para cursar Desarrollo Gerencial?',
+      '¿Qué requisitos exige Métodos y Técnicas de Intervención Organizacional?',
+      '¿Cuáles son los requisitos de asistencia y parciales para regularizar?'
     ]
   },
   practica3: {

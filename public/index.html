@@ -1,99 +1,229 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
   <base href="." />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3e%3cdefs%3e%3cstyle%3e.bg %7b fill: %23333333; %7d .stroke %7b stroke: %2329B6F6; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; %7d .accent %7b fill: %2329B6F6; %7d .star %7b fill: %23FFFFFF; %7d%3c/style%3e%3c/defs%3e%3cpath class='bg stroke' d='M20 5 H70 L95 30 V95 H20 Z'/%3e%3cpath class='stroke' fill='none' d='M70 5 V30 H95'/%3e%3ccircle class='accent' cx='50' cy='55' r='28'/%3e%3cpath class='accent' d='M35 83 L50 72 L65 83 Z'/%3e%3cpath class='star' d='M50 42 l 5 10 l 10 5 l -10 5 l -5 10 l -5 -10 l -10 -5 l 10 -5 Z'/%3e%3c/svg%3e">
-  <title>Agente IA</title>
+  <title>Plataforma de Agentes IA Inteligentes</title>
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3e%3cdefs%3e%3clinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3e%3cstop offset='0%25' stop-color='%2338bdf8'/%3e%3cstop offset='100%25' stop-color='%23818cf8'/%3e%3c/linearGradient%3e%3c/defs%3e%3ccircle cx='50' cy='50' r='45' fill='url(%23g)'/%3e%3cpath d='M30 52 L45 67 L72 35' fill='none' stroke='white' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e">
+  
+  <!-- Tipografía moderna -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Estilos -->
   <link rel="stylesheet" href="./css/style.css">
+  
+  <!-- Dependencias Externas -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
-<body>
+<body data-agent="capacitaciones">
+  <div class="app-background-glow glow-1"></div>
+  <div class="app-background-glow glow-2"></div>
+
   <div class="container">
+    <!-- Header Principal -->
     <header class="header">
       <div class="header-left">
-        <svg class="app-logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#3b82f6" />
-              <stop offset="100%" stop-color="#8b5cf6" />
-            </linearGradient>
-          </defs>
-          <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="url(#logoGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M14 2V8H20" stroke="url(#logoGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M16 13H8" stroke="url(#logoGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M16 17H8" stroke="url(#logoGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M10 9H9H8" stroke="url(#logoGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <div>
-          <h1>Tus Agentes IA</h1>
-          <p>Elige tu asistente inteligente</p>
+        <div class="app-logo-wrapper">
+          <div class="app-logo-glow"></div>
+          <svg class="app-logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="header-titles">
+          <div class="brand-line">
+            <h1>Nexus IA</h1>
+            <span class="badge-status">
+              <span class="status-dot pulse"></span>
+              Ultra Fast AI
+            </span>
+          </div>
+          <p class="subtitle">Asistentes Virtuales Especializados</p>
         </div>
       </div>
-      <div class="header-tabs">
-        <button class="tab-btn active" data-mode="capacitaciones"><strong>Agente Capacitaciones</strong> (Actividad sincronica 3)</button>
-        <button class="tab-btn" data-mode="curzas"><strong>IA Curzas</strong> (Actividad asincronica 3)</button>
-        <button class="tab-btn" data-mode="practica3"><strong>Práctica 3</strong> (Subir PDF)</button>
+
+      <!-- Selector de Agentes Tipo Segmented Tabs -->
+      <nav class="agent-nav" aria-label="Selección de Asistente">
+        <button class="agent-tab active" data-mode="capacitaciones" id="tab-capacitaciones">
+          <span class="tab-icon">🎓</span>
+          <div class="tab-text">
+            <span class="tab-title">Agente Capacitaciones</span>
+            <span class="tab-sub">(Actividad sincrónica 3)</span>
+          </div>
+        </button>
+        <button class="agent-tab" data-mode="curzas" id="tab-curzas">
+          <span class="tab-icon">🏛️</span>
+          <div class="tab-text">
+            <span class="tab-title">IA Curzas</span>
+            <span class="tab-sub">(Actividad asincrónica 3)</span>
+          </div>
+        </button>
+        <button class="agent-tab" data-mode="practica3" id="tab-practica3">
+          <span class="tab-icon">📑</span>
+          <div class="tab-text">
+            <span class="tab-title">Práctica 3</span>
+            <span class="tab-sub">(Subir PDF)</span>
+          </div>
+        </button>
+      </nav>
+
+      <!-- Utilidades de Chat -->
+      <div class="header-actions">
+        <button id="clear-chat-btn" class="util-btn" title="Limpiar conversación actual" aria-label="Limpiar chat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 6h18m-2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          <span class="btn-tooltip">Limpiar Chat</span>
+        </button>
+        <button id="export-chat-btn" class="util-btn" title="Exportar historial a Markdown" aria-label="Exportar chat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span class="btn-tooltip">Exportar Chat</span>
+        </button>
       </div>
     </header>
   
+    <!-- Contenido Principal -->
     <div class="main-content mode-ia">
+      <!-- Panel Izquierdo: Workspace de PDF (Activo en modo PDF) -->
       <div class="left-section">
-        <div class="upload-section">
-          <label for="pdf-upload" class="upload-label">
-            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <div class="pdf-header-bar">
+          <div class="pdf-file-info" id="pdf-file-info">
+            <svg class="pdf-file-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
             </svg>
-            <span>Arrastra tu PDF aquí o haz click para seleccionar</span>
-          </label>
-          <input type="file" id="pdf-upload" accept=".pdf" />
-          <div class="search-section">
-            <input type="text" id="search-input" placeholder="Buscar en el PDF..." />
-            <button id="search-button">
-              <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-              Buscar
-            </button>
+            <span id="pdf-filename">Ningún archivo cargado</span>
+          </div>
+          <div class="pdf-controls" id="pdf-controls">
+            <button id="zoom-out-btn" class="pdf-ctrl-btn" title="Alejar">-</button>
+            <span id="zoom-level">100%</span>
+            <button id="zoom-in-btn" class="pdf-ctrl-btn" title="Acercar">+</button>
+            <label for="pdf-upload" class="pdf-ctrl-btn change-pdf-btn" title="Cargar otro PDF">
+              Cambiar
+            </label>
           </div>
         </div>
+
+        <div class="upload-section" id="drop-zone">
+          <label for="pdf-upload" class="upload-label">
+            <div class="upload-icon-ring">
+              <svg class="upload-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="upload-text-group">
+              <span class="upload-title">Arrastra tu PDF aquí o haz click</span>
+              <span class="upload-subtitle">Soporta solicitudes, actas, reglamentos (Máx. 25MB)</span>
+            </div>
+          </label>
+          <input type="file" id="pdf-upload" accept=".pdf" />
+          
+          <div class="search-section">
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <input type="text" id="search-input" placeholder="Buscar texto en el PDF..." />
+            </div>
+            <button id="search-button">Buscar</button>
+          </div>
+        </div>
+
         <div id="pdf-preview" class="pdf-preview">
           <div id="pdf-content" class="pdf-content"></div>
         </div>
       </div>
   
-      <div class="resizer" id="dragMe"></div>
+      <!-- Divisor Redimensionable -->
+      <div class="resizer" id="dragMe" title="Arrastrar para redimensionar">
+        <div class="resizer-handle"></div>
+      </div>
 
+      <!-- Panel Derecho: Chat Interactivo del Asistente -->
       <section class="chat-section">
+        <!-- Sub-barra del Agente Activo -->
+        <div class="chat-header-bar">
+          <div class="agent-info-bar">
+            <div class="agent-avatar-badge" id="agent-avatar-icon">🎓</div>
+            <div>
+              <h2 id="agent-active-title">Agente de Capacitaciones</h2>
+              <div class="agent-sub-status">
+                <span class="status-indicator"></span>
+                <span id="agent-active-desc">Municipalidad de Puerto Norte • Reglamento v2026</span>
+              </div>
+            </div>
+          </div>
+          <div class="chat-header-badges">
+            <span class="badge-pill" id="agent-mode-badge">Modo Asesor</span>
+          </div>
+        </div>
+
+        <!-- Área de Mensajes -->
         <div id="chat-messages" class="chat-messages"></div>
-        <div class="input-section">
-          <button id="voice-toggle-btn" class="icon-btn active" title="Voz IA Activada">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-              <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path class="voice-waves" d="M15.54 8.46C16.4774 9.39764 17.004 10.6692 17.004 11.995C17.004 13.3208 16.4774 14.5924 15.54 15.53M19.07 4.93C20.9447 6.80527 21.9979 9.34836 21.9979 12C21.9979 14.6516 20.9447 17.1947 19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <button id="mic-toggle-btn" class="icon-btn" title="Activar Micrófono">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <input type="text" id="question-input" placeholder="Haz tu pregunta sobre el PDF..." />
-          <button id="send-button">Enviar</button>
+
+        <!-- Barra de Entrada Flotante -->
+        <div class="input-section-wrapper">
+          <div class="input-section">
+            <div class="input-tools">
+              <!-- Botón de Voz / Altavoz -->
+              <button id="voice-toggle-btn" class="icon-btn active" title="Voz IA Activada (Click para silenciar)">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="speaker-icon">
+                  <path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path class="voice-waves wave-1" d="M15.54 8.46C16.4774 9.39764 17.004 10.6692 17.004 11.995C17.004 13.3208 16.4774 14.5924 15.54 15.53" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path class="voice-waves wave-2" d="M19.07 4.93C20.9447 6.80527 21.9979 9.34836 21.9979 12C21.9979 14.6516 20.9447 17.1947 19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <div class="audio-equalizer">
+                  <span></span><span></span><span></span>
+                </div>
+              </button>
+
+              <!-- Botón de Micrófono -->
+              <button id="mic-toggle-btn" class="icon-btn" title="Activar Reconocimiento de Voz">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="mic-icon">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="mic-pulse-ring"></span>
+              </button>
+            </div>
+
+            <!-- Input de Pregunta -->
+            <div class="input-field-container">
+              <input type="text" id="question-input" placeholder="Haz tu pregunta al asistente..." autocomplete="off" />
+            </div>
+
+            <!-- Botón de Envío -->
+            <button id="send-button" class="send-btn" title="Enviar pregunta (Enter)">
+              <span>Enviar</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
+          <div class="input-footer-hint">
+            <span>💡 Atajo: Presiona <strong>Enter ↵</strong> para enviar</span>
+          </div>
         </div>
       </section>
     </div>
   </div>
-  
-  <footer class="footer">
-      <!-- El footer se puede añadir de nuevo si se desea, lo he quitado para simplificar -->
-  </footer>
   
   <script src="./js/modules/voice.js"></script>
   <script src="./js/app.js"></script>

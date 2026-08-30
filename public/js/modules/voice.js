@@ -5,10 +5,13 @@ class VoiceManager {
         this.recognition = null;
         this.isVoiceEnabled = true; // Por defecto la voz está activada
         this.isMicActive = false;
+        this.isSpeaking = false;
         
         this.onMicResult = null; // Callback para cuando se recibe texto
         this.onMicEnd = null; // Callback para cuando termina de escuchar
         this.onMicError = null; // Callback para errores
+        this.onSpeakStart = null; // Callback al empezar a hablar
+        this.onSpeakEnd = null; // Callback al terminar de hablar
 
         this.initRecognition();
         
@@ -71,6 +74,8 @@ class VoiceManager {
     stopSpeaking() {
         if (this.synth) {
             this.synth.cancel();
+            this.isSpeaking = false;
+            if (this.onSpeakEnd) this.onSpeakEnd();
         }
     }
 
@@ -81,7 +86,7 @@ class VoiceManager {
         this.stopSpeaking();
 
         // Limpiar el texto de markdown para que se escuche fluido
-        const cleanText = text.replace(/[\*#\_`\[\]\(\)]/g, '');
+        const cleanText = text.replace(/[\*#\_`\[\]\(\)]/g, '').replace(/\|[^\n]+\|/g, '');
 
         const utterance = new SpeechSynthesisUtterance(cleanText);
         utterance.lang = 'es-ES';
@@ -92,6 +97,21 @@ class VoiceManager {
         if (spanishVoice) {
             utterance.voice = spanishVoice;
         }
+
+        utterance.onstart = () => {
+            this.isSpeaking = true;
+            if (this.onSpeakStart) this.onSpeakStart();
+        };
+
+        utterance.onend = () => {
+            this.isSpeaking = false;
+            if (this.onSpeakEnd) this.onSpeakEnd();
+        };
+
+        utterance.onerror = () => {
+            this.isSpeaking = false;
+            if (this.onSpeakEnd) this.onSpeakEnd();
+        };
 
         this.synth.speak(utterance);
     }

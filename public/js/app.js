@@ -1,342 +1,628 @@
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
-  
-  let pdfText = '';
-  let pdfDocument = null;
-  let currentMode = 'capacitaciones';
-  let chatHistory = [];
-  
-  const chatMessages = document.getElementById('chat-messages');
-  const questionInput = document.getElementById('question-input');
-  const sendButton = document.getElementById('send-button');
-  const pdfContent = document.getElementById('pdf-content');
-  const searchInput = document.getElementById('search-input');
-  const searchButton = document.getElementById('search-button');
-  
-  // ===================================================================
-  // Voice & Mic Integration
-  // ===================================================================
-  const voiceManager = new VoiceManager();
-  const voiceToggleBtn = document.getElementById('voice-toggle-btn');
-  const micToggleBtn = document.getElementById('mic-toggle-btn');
+// ===================================================================
+// Plataforma Nexus IA - Aplicación Principal (Frontend Controller)
+// ===================================================================
 
-  voiceManager.onMicResult = (finalTranscript, interimTranscript) => {
-    questionInput.value = finalTranscript || interimTranscript;
-  };
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
 
-  voiceManager.onMicEnd = () => {
-    micToggleBtn.classList.remove('active');
-  };
+// Estado global de la aplicación
+let pdfText = '';
+let pdfDocument = null;
+let currentMode = 'capacitaciones';
+let chatHistory = [];
+let currentZoom = 1.0;
 
-  voiceToggleBtn.addEventListener('click', () => {
-    const isEnabled = voiceManager.toggleVoice();
-    if (isEnabled) {
-      voiceToggleBtn.classList.add('active');
-    } else {
-      voiceToggleBtn.classList.remove('active');
-    }
-  });
-
-  micToggleBtn.addEventListener('click', () => {
-    const isActive = voiceManager.toggleMic();
-    if (isActive) {
-      micToggleBtn.classList.add('active');
-    } else {
-      micToggleBtn.classList.remove('active');
-    }
-  });
-  
-  async function loadPDF(file) {
-    try {
-      addMessage('Sistema: Analizando PDF, por favor espera...', 'ai-message');
-      const arrayBuffer = await file.arrayBuffer();
-      pdfDocument = await pdfjsLib.getDocument(arrayBuffer).promise;
-      pdfText = '';
-      pdfContent.innerHTML = '';
-  
-      for (let i = 1; i <= pdfDocument.numPages; i++) {
-        const page = await pdfDocument.getPage(i);
-        const textContent = await page.getTextContent();
-        
-        const pageText = textContent.items.map(item => item.str).join(' ');
-        pdfText += `[Página ${i}] ${pageText}\n\n`;
-  
-        const pageDiv = document.createElement('div');
-        pageDiv.className = 'page-container';
-        pageDiv.id = `page-${i}`;
-  
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        const viewport = page.getViewport({ scale: 1.5 });
-        
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-  
-        const textLayerDiv = document.createElement('div');
-        textLayerDiv.className = 'text-layer';
-        textLayerDiv.style.width = `${viewport.width}px`;
-        textLayerDiv.style.height = `${viewport.height}px`;
-  
-        pageDiv.appendChild(canvas);
-        pageDiv.appendChild(textLayerDiv);
-        pdfContent.appendChild(pageDiv);
-  
-        await page.render({ canvasContext: context, viewport }).promise;
-        
-        pdfjsLib.renderTextLayer({
-            textContent,
-            container: textLayerDiv,
-            viewport,
-            textDivs: []
-        });
-      }
-      
-      document.querySelector('.left-section').classList.add('pdf-loaded');
-      addMessage('Sistema: PDF cargado correctamente. Ya puedes hacer preguntas.', 'ai-message');
-    } catch (error) {
-      console.error('Error al cargar el PDF:', error);
-      addMessage('Sistema: Error al cargar el PDF. Por favor, intenta con otro archivo.', 'ai-message');
-    }
+// Configuración de los Agentes
+const AGENTS_CONFIG = {
+  capacitaciones: {
+    icon: '🎓',
+    title: 'Agente Capacitaciones (Actividad sincrónica 3)',
+    desc: 'Asesor oficial del Programa Anual de Capacitación de la Municipalidad de Puerto Norte.',
+    badge: 'Actividad Sincrónica 3 • Reglamento v2026',
+    placeholder: 'Pregunta sobre convocatorias, requisitos de antigüedad, cupos o certificados...',
+    chips: [
+      '¿Cuáles son los requisitos de antigüedad para inscribirme?',
+      '¿Qué pasa si las inscripciones superan el cupo máximo?',
+      '¿Qué porcentaje de asistencia necesito para poder certificar?',
+      '¿Cómo y con cuánta antelación debo solicitar una baja?'
+    ]
+  },
+  curzas: {
+    icon: '🏛️',
+    title: 'IA Curzas (Actividad asincrónica 3)',
+    desc: 'Orientación académica sobre materias, correlativas y régimen de cursada del CURZA.',
+    badge: 'Actividad Asincrónica 3 • Plan Oficial',
+    placeholder: 'Pregunta sobre materias, correlativas para cursar o finales...',
+    chips: [
+      '¿Cuáles son las materias del plan de estudios de la carrera?',
+      '¿Qué correlativas necesito para cursar Gestión de las Personas?',
+      '¿Cuál es el requisito de asistencia y notas para regularizar?',
+      '¿Cuánto tiempo dura la regularidad para rendir un examen final?'
+    ]
+  },
+  practica3: {
+    icon: '📑',
+    title: 'Práctica 3 (Subir PDF)',
+    desc: 'Sube un documento PDF para validar automáticamente requisitos y normas del organismo.',
+    badge: 'Práctica 3 • Análisis de Documento',
+    placeholder: 'Haz tu pregunta sobre el PDF cargado (ej. ¿Cumple la antigüedad?)...',
+    chips: [
+      '¿El postulante cumple los requisitos de antigüedad del art. 4?',
+      'Resumir los datos principales y situación de revista del documento',
+      '¿La solicitud fue presentada dentro del plazo de 10 días hábiles?'
+    ]
   }
-  
-  function searchInPDF() {
-    const searchTerm = searchInput.value.trim().toLowerCase();
-    if (!searchTerm || !pdfDocument) return;
+};
 
-    clearAllHighlights();
-  
-    const textLayers = document.querySelectorAll('.text-layer');
-    let foundCount = 0;
-    let firstFoundPage = -1;
+// Elementos del DOM
+const chatMessages = document.getElementById('chat-messages');
+const questionInput = document.getElementById('question-input');
+const sendButton = document.getElementById('send-button');
+const pdfContent = document.getElementById('pdf-content');
+const searchInput = document.getElementById('search-input');
+const searchButton = document.getElementById('search-button');
+const pdfFileInput = document.getElementById('pdf-upload');
+const dropZone = document.getElementById('drop-zone');
+const pdfFilenameEl = document.getElementById('pdf-filename');
+const zoomLevelEl = document.getElementById('zoom-level');
+const zoomInBtn = document.getElementById('zoom-in-btn');
+const zoomOutBtn = document.getElementById('zoom-out-btn');
+const clearChatBtn = document.getElementById('clear-chat-btn');
+const exportChatBtn = document.getElementById('export-chat-btn');
+const mainContent = document.querySelector('.main-content');
+const tabButtons = document.querySelectorAll('.agent-tab');
 
-    textLayers.forEach((layer, index) => {
-        const pageNum = index + 1;
-        const textSpans = layer.querySelectorAll('span');
-        textSpans.forEach(span => {
-            if (span.textContent.toLowerCase().includes(searchTerm)) {
-                if (firstFoundPage === -1) firstFoundPage = pageNum;
-                foundCount++;
-                const regex = new RegExp(`(${searchTerm})`, 'gi');
-                span.innerHTML = span.textContent.replace(regex, `<mark class="highlight flash">$1</mark>`);
-            }
-        });
+// Sub-barra del Agente
+const agentAvatarIcon = document.getElementById('agent-avatar-icon');
+const agentActiveTitle = document.getElementById('agent-active-title');
+const agentActiveDesc = document.getElementById('agent-active-desc');
+const agentModeBadge = document.getElementById('agent-mode-badge');
+
+// ===================================================================
+// Módulo de Voz y Micrófono
+// ===================================================================
+const voiceManager = new VoiceManager();
+const voiceToggleBtn = document.getElementById('voice-toggle-btn');
+const micToggleBtn = document.getElementById('mic-toggle-btn');
+
+voiceManager.onMicResult = (finalTranscript, interimTranscript) => {
+  questionInput.value = finalTranscript || interimTranscript;
+};
+
+voiceManager.onMicEnd = () => {
+  micToggleBtn.classList.remove('active');
+};
+
+voiceManager.onSpeakStart = () => {
+  voiceToggleBtn.classList.add('speaking');
+};
+
+voiceManager.onSpeakEnd = () => {
+  voiceToggleBtn.classList.remove('speaking');
+};
+
+voiceToggleBtn.addEventListener('click', () => {
+  const isEnabled = voiceManager.toggleVoice();
+  if (isEnabled) {
+    voiceToggleBtn.classList.add('active');
+  } else {
+    voiceToggleBtn.classList.remove('active');
+    voiceToggleBtn.classList.remove('speaking');
+  }
+});
+
+micToggleBtn.addEventListener('click', () => {
+  const isActive = voiceManager.toggleMic();
+  if (isActive) {
+    micToggleBtn.classList.add('active');
+  } else {
+    micToggleBtn.classList.remove('active');
+  }
+});
+
+// ===================================================================
+// Renderizado de la Pantalla de Bienvenida (Hero Card)
+// ===================================================================
+function renderHeroWelcome() {
+  chatMessages.innerHTML = '';
+  const agent = AGENTS_CONFIG[currentMode];
+
+  const hero = document.createElement('div');
+  hero.className = 'hero-welcome-card';
+  hero.innerHTML = `
+    <div class="hero-avatar-ring">${agent.icon}</div>
+    <div>
+      <h3 class="hero-title">${agent.title}</h3>
+      <p class="hero-desc">${agent.desc}</p>
+    </div>
+    <div class="hero-chips-container">
+      <span class="hero-chips-label">Consultas frecuentes sugeridas</span>
+      <div class="hero-chips-grid">
+        ${agent.chips.map(chip => `
+          <button class="prompt-chip" data-prompt="${chip}">
+            <span class="chip-icon">⚡</span>
+            <span>${chip}</span>
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `;
+
+  // Asignar eventos click a cada prompt chip
+  hero.querySelectorAll('.prompt-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const prompt = btn.getAttribute('data-prompt');
+      questionInput.value = prompt;
+      submitUserQuestion(prompt);
+    });
+  });
+
+  chatMessages.appendChild(hero);
+  chatMessages.scrollTop = 0;
+}
+
+// ===================================================================
+// Mensajería y Renderizado de Chat
+// ===================================================================
+function removeHeroWelcome() {
+  const hero = chatMessages.querySelector('.hero-welcome-card');
+  if (hero) {
+    hero.remove();
+  }
+}
+
+function appendUserMessage(text) {
+  removeHeroWelcome();
+
+  const msgWrapper = document.createElement('div');
+  msgWrapper.className = 'message-wrapper user-msg';
+  msgWrapper.innerHTML = `
+    <div class="message-avatar">TÚ</div>
+    <div class="message-bubble">${escapeHTML(text)}</div>
+  `;
+  chatMessages.appendChild(msgWrapper);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function appendAiThinking() {
+  removeHeroWelcome();
+
+  const msgWrapper = document.createElement('div');
+  msgWrapper.className = 'message-wrapper ai-msg thinking-wrapper';
+  msgWrapper.innerHTML = `
+    <div class="message-avatar">${AGENTS_CONFIG[currentMode].icon}</div>
+    <div class="message-bubble">
+      <div class="thinking-bubble">
+        <span>Nexus IA está procesando tu respuesta...</span>
+        <div class="thinking-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  `;
+  chatMessages.appendChild(msgWrapper);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return msgWrapper;
+}
+
+function updateAiMessage(thinkingWrapper, markdownResponse) {
+  const bubble = thinkingWrapper.querySelector('.message-bubble');
+  const renderedHTML = marked.parse(markdownResponse);
+
+  bubble.innerHTML = `
+    <div class="ai-text-content">${renderedHTML}</div>
+    <div class="message-actions">
+      <button class="msg-act-btn copy-btn" title="Copiar al portapapeles">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        <span class="copy-text">Copiar</span>
+      </button>
+      <button class="msg-act-btn speak-btn" title="Escuchar respuesta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+        <span>Escuchar</span>
+      </button>
+    </div>
+  `;
+
+  // Copiar al portapapeles
+  const copyBtn = bubble.querySelector('.copy-btn');
+  copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(markdownResponse).then(() => {
+      const copyText = copyBtn.querySelector('.copy-text');
+      copyText.textContent = '¡Copiado!';
+      setTimeout(() => { copyText.textContent = 'Copiar'; }, 2000);
+    });
+  });
+
+  // Escuchar mensaje
+  const speakBtn = bubble.querySelector('.speak-btn');
+  speakBtn.addEventListener('click', () => {
+    voiceManager.speak(markdownResponse);
+  });
+
+  thinkingWrapper.classList.remove('thinking-wrapper');
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function escapeHTML(str) {
+  return str.replace(/[&<>'"]/g, 
+    tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+  );
+}
+
+// ===================================================================
+// Caché en Memoria (Zero-Token Cache)
+// ===================================================================
+const responseCache = new Map();
+
+function getCacheKey(mode, question, context) {
+  // Limpiar espacios para clave consistente
+  const qClean = question.trim().toLowerCase();
+  const cClean = (context || '').substring(0, 100).trim();
+  return `${mode}::${qClean}::${cClean}`;
+}
+
+// ===================================================================
+// Llamada al Backend / API
+// ===================================================================
+async function callGroqAPI(question, context) {
+  const cacheKey = getCacheKey(currentMode, question, context);
+
+  // Si ya tenemos la respuesta en caché y el historial es corto, devolver de inmediato sin consumir tokens
+  if (responseCache.has(cacheKey) && chatHistory.length <= 2) {
+    console.log('[Zero-Token Cache] Respuesta servida desde caché local');
+    return responseCache.get(cacheKey);
+  }
+
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        question, 
+        context, 
+        mode: currentMode, 
+        history: chatHistory.slice(-3) 
+      })
     });
 
-    if (foundCount > 0) {
-        addMessage(`Término "${searchTerm}" encontrado ${foundCount} veces.`, 'ai-message');
-        document.getElementById(`page-${firstFoundPage}`).scrollIntoView({ behavior: 'smooth' });
-        setTimeout(() => {
-            document.querySelectorAll('.highlight.flash').forEach(el => el.classList.remove('flash'));
-        }, 2000);
-    } else {
-        addMessage(`Término "${searchTerm}" no encontrado en el documento.`, 'ai-message');
-    }
-  }
-
-  function clearAllHighlights() {
-      const marks = document.querySelectorAll('mark.highlight');
-      marks.forEach(mark => {
-          const parent = mark.parentNode;
-          parent.replaceWith(parent.textContent);
-      });
-  }
-  
-  function addMessage(text, className, isThinking = false) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${className}`;
-    
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'message-content';
-    messageDiv.appendChild(contentDiv);
-
-    if(isThinking) {
-      messageDiv.classList.add('thinking-message');
-      contentDiv.textContent = text;
-    } else {
-      if (className === 'ai-message') {
-        contentDiv.innerHTML = marked.parse(text);
-      } else {
-        contentDiv.textContent = text;
-      }
-    }
-    chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    return contentDiv;
-  }
-  
-  // ===================================================================
-  // ¡AQUÍ ESTÁ EL CAMBIO!
-  // Esta función ahora llama a nuestro servidor intermediario seguro
-  // y ya no contiene ninguna clave de API.
-  // ===================================================================
-  async function callGroqAPI(question, context) {
+    if (!response.ok) {
+      let errorMessage = `Error del servidor: ${response.status} ${response.statusText}`;
       try {
-          const response = await fetch('/api/chat', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              // Enviamos los últimos 6 mensajes como historial para no saturar el contexto
-              body: JSON.stringify({ question, context, mode: currentMode, history: chatHistory.slice(-6) })
-          });
+        const errorData = await response.json();
+        errorMessage = errorData.error || response.statusText;
+      } catch (e) {}
+      throw new Error(errorMessage);
+    }
 
-          if (!response.ok) {
-              let errorMessage = `Error del servidor: ${response.status} ${response.statusText}`;
-              try {
-                  const errorData = await response.json();
-                  errorMessage = `Error del servidor: ${errorData.error || response.statusText}`;
-              } catch (e) {
-                  if (response.status === 405 || response.status === 404) {
-                      errorMessage = `Error ${response.status}: El servidor backend no está respondiendo en /api/chat. Asegúrate de estar ejecutando "node src/server.js" y de acceder a http://localhost:3000 en lugar de usar Live Server.`;
-                  }
-              }
-              throw new Error(errorMessage);
-          }
+    const data = await response.json();
+    const answer = data.choices[0].message.content.trim();
 
-          const data = await response.json();
-          return data.choices[0].message.content.trim();
+    // Guardar en caché local
+    responseCache.set(cacheKey, answer);
 
-      } catch (error) {
-          console.error('Error al llamar al servidor intermediario:', error);
-          throw error;
+    return answer;
+  } catch (error) {
+    console.error('Error al llamar al backend:', error);
+    throw error;
+  }
+}
+
+async function submitUserQuestion(question) {
+  const trimmed = question.trim();
+  if (!trimmed) return;
+
+  if (currentMode === 'practica3' && !pdfText) {
+    appendUserMessage(trimmed);
+    const thinking = appendAiThinking();
+    updateAiMessage(thinking, '⚠️ **Atención:** Por favor, carga el documento PDF en el panel izquierdo primero para que pueda analizarlo y responder a tus consultas.');
+    return;
+  }
+
+  appendUserMessage(trimmed);
+  questionInput.value = '';
+  voiceManager.stopSpeaking();
+
+  const thinkingWrapper = appendAiThinking();
+
+  try {
+    const context = currentMode === 'practica3' ? pdfText : '';
+    const response = await callGroqAPI(trimmed, context);
+    
+    // Guardar en historial
+    chatHistory.push({ role: 'user', content: trimmed });
+    chatHistory.push({ role: 'assistant', content: response });
+
+    updateAiMessage(thinkingWrapper, response);
+    voiceManager.speak(response);
+
+  } catch (error) {
+    updateAiMessage(thinkingWrapper, `❌ **Ocurrió un error al procesar tu consulta:**\n\n\`${error.message}\`\n\nPor favor, verifica tu conexión o las claves configuradas en el servidor.`);
+  }
+}
+
+// ===================================================================
+// Lógica de PDF (Carga, Renderizado, Zoom y Búsqueda)
+// ===================================================================
+async function loadPDF(file) {
+  try {
+    pdfFilenameEl.textContent = file.name;
+    document.querySelector('.left-section').classList.add('pdf-loaded');
+    pdfContent.innerHTML = '<div style="color: var(--text-muted); padding: 2rem;">Cargando y procesando páginas...</div>';
+
+    const arrayBuffer = await file.arrayBuffer();
+    pdfDocument = await pdfjsLib.getDocument(arrayBuffer).promise;
+    pdfText = '';
+    pdfContent.innerHTML = '';
+
+    for (let i = 1; i <= pdfDocument.numPages; i++) {
+      const page = await pdfDocument.getPage(i);
+      const textContent = await page.getTextContent();
+      
+      const pageText = textContent.items.map(item => item.str).join(' ');
+      pdfText += `[Página ${i}] ${pageText}\n\n`;
+
+      const pageDiv = document.createElement('div');
+      pageDiv.className = 'page-container';
+      pageDiv.id = `page-${i}`;
+
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      const viewport = page.getViewport({ scale: 1.5 });
+      
+      canvas.height = viewport.height;
+      canvas.width = viewport.width;
+
+      const textLayerDiv = document.createElement('div');
+      textLayerDiv.className = 'text-layer';
+      textLayerDiv.style.width = `${viewport.width}px`;
+      textLayerDiv.style.height = `${viewport.height}px`;
+
+      pageDiv.appendChild(canvas);
+      pageDiv.appendChild(textLayerDiv);
+      pdfContent.appendChild(pageDiv);
+
+      await page.render({ canvasContext: context, viewport }).promise;
+      
+      pdfjsLib.renderTextLayer({
+        textContent,
+        container: textLayerDiv,
+        viewport,
+        textDivs: []
+      });
+    }
+
+    if (chatHistory.length === 0) {
+      renderHeroWelcome();
+    }
+  } catch (error) {
+    console.error('Error al cargar PDF:', error);
+    pdfContent.innerHTML = '<div style="color: #ef4444; padding: 2rem;">Error al procesar el archivo PDF. Intenta con otro documento.</div>';
+  }
+}
+
+// Drag and Drop en Dropzone
+['dragenter', 'dragover'].forEach(eventName => {
+  dropZone.addEventListener(eventName, (e) => {
+    e.preventDefault();
+    dropZone.classList.add('drag-over');
+  });
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+  dropZone.addEventListener(eventName, (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+  });
+});
+
+dropZone.addEventListener('drop', (e) => {
+  const files = e.dataTransfer.files;
+  if (files.length > 0 && files[0].type === 'application/pdf') {
+    loadPDF(files[0]);
+  }
+});
+
+pdfFileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file && file.type === 'application/pdf') {
+    loadPDF(file);
+  }
+});
+
+// Controles de Zoom
+zoomInBtn.addEventListener('click', () => {
+  if (currentZoom < 2.0) {
+    currentZoom += 0.15;
+    applyZoom();
+  }
+});
+
+zoomOutBtn.addEventListener('click', () => {
+  if (currentZoom > 0.6) {
+    currentZoom -= 0.15;
+    applyZoom();
+  }
+});
+
+function applyZoom() {
+  zoomLevelEl.textContent = `${Math.round(currentZoom * 100)}%`;
+  pdfContent.style.transform = `scale(${currentZoom})`;
+}
+
+// Búsqueda en PDF
+function searchInPDF() {
+  const searchTerm = searchInput.value.trim().toLowerCase();
+  if (!searchTerm || !pdfDocument) return;
+
+  clearAllHighlights();
+
+  const textLayers = document.querySelectorAll('.text-layer');
+  let foundCount = 0;
+  let firstFoundPage = -1;
+
+  textLayers.forEach((layer, index) => {
+    const pageNum = index + 1;
+    const textSpans = layer.querySelectorAll('span');
+    textSpans.forEach(span => {
+      if (span.textContent.toLowerCase().includes(searchTerm)) {
+        if (firstFoundPage === -1) firstFoundPage = pageNum;
+        foundCount++;
+        const regex = new RegExp(`(${searchTerm})`, 'gi');
+        span.innerHTML = span.textContent.replace(regex, `<mark class="highlight flash">$1</mark>`);
       }
+    });
+  });
+
+  if (foundCount > 0 && firstFoundPage !== -1) {
+    document.getElementById(`page-${firstFoundPage}`).scrollIntoView({ behavior: 'smooth' });
   }
-  
-  async function processQuestion(question) {
-    if (currentMode === 'practica3' && !pdfText) {
-      addMessage('Sistema: Por favor, carga el PDF de la solicitud en el panel izquierdo primero.', 'ai-message');
-      return;
-    }
-  
-    if (question.trim().length < 4) {
-      addMessage('Sistema: Por favor, formula una pregunta más específica.', 'ai-message');
-      return;
-    }
+}
 
-    const thinkingMessage = addMessage('IA está pensando...', 'ai-message', true);
-  
-    try {
-      const context = currentMode === 'practica3' ? pdfText : '';
-      const response = await callGroqAPI(question, context);
-      
-      // Guardar en el historial
-      chatHistory.push({ role: 'user', content: question });
-      chatHistory.push({ role: 'assistant', content: response });
-
-      thinkingMessage.innerHTML = marked.parse(response);
-      thinkingMessage.parentElement.classList.remove('thinking-message');
-      
-      // Reproducir voz si está habilitada
-      voiceManager.speak(response);
-
-    } catch (error) {
-      console.error('Error al procesar la pregunta:', error);
-      thinkingMessage.textContent = `Error: ${error.message}. Revisa la consola para más detalles.`;
-      thinkingMessage.parentElement.classList.remove('thinking-message');
-    }
-  }
-  
-  document.getElementById('pdf-upload').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file && file.type === 'application/pdf') {
-      loadPDF(file);
-    } else {
-      addMessage('Sistema: Por favor, selecciona un archivo PDF válido.', 'ai-message');
+function clearAllHighlights() {
+  const marks = document.querySelectorAll('mark.highlight');
+  marks.forEach(mark => {
+    const parent = mark.parentNode;
+    if (parent) {
+      parent.replaceWith(parent.textContent);
     }
   });
-  
-  sendButton.addEventListener('click', () => {
-    const question = questionInput.value.trim();
-    if (question) {
-      voiceManager.stopSpeaking(); // Parar de hablar al enviar una nueva pregunta
-      addMessage(`Tú: ${question}`, 'user-message');
-      processQuestion(question);
-      questionInput.value = '';
-    }
-  });
-  
-  searchButton.addEventListener('click', searchInPDF);
-  
-  searchInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      searchInPDF();
-    }
-  });
-  
-  questionInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      sendButton.click();
-    }
-  });
+}
 
-  const tabButtons = document.querySelectorAll('.tab-btn');
-  const mainContent = document.querySelector('.main-content');
+searchButton.addEventListener('click', searchInPDF);
+searchInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') searchInPDF();
+});
+
+// ===================================================================
+// Cambio de Agentes / Modos
+// ===================================================================
+function switchAgent(mode) {
+  if (currentMode === mode && chatHistory.length > 0) return;
+
+  currentMode = mode;
+  document.body.setAttribute('data-agent', mode);
 
   tabButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (currentMode === btn.dataset.mode) return;
-
-      tabButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      
-      currentMode = btn.dataset.mode;
-      chatMessages.innerHTML = ''; // Limpiar el chat
-      chatHistory = []; // Limpiar historial al cambiar de modo
-      
-      if (currentMode === 'curzas') {
-        mainContent.classList.add('mode-ia');
-        addMessage('Sistema: Hola. Soy el Agente de CURZA. Te ayudaré con información sobre la Licenciatura en Gestión de Recursos Humanos.', 'ai-message');
-      } else if (currentMode === 'practica3') {
-        mainContent.classList.remove('mode-ia');
-        addMessage('Sistema: Modo Práctica 3. Puedes subir un documento (ej. solicitud-morales.pdf) a la izquierda y consultarle al Agente de Capacitaciones si aprueba los requisitos.', 'ai-message');
-      } else {
-        mainContent.classList.add('mode-ia');
-        addMessage('Sistema: Hola. Soy el Agente de Capacitaciones. ¿En qué te puedo ayudar con el trámite?', 'ai-message');
-      }
-    });
+    btn.classList.toggle('active', btn.dataset.mode === mode);
   });
 
-  mainContent.classList.add('mode-ia');
-  addMessage('Sistema: Hola. Soy el Agente de Capacitaciones. ¿En qué te puedo ayudar con el trámite?', 'ai-message');
+  const config = AGENTS_CONFIG[mode];
+  agentAvatarIcon.textContent = config.icon;
+  agentActiveTitle.textContent = config.title;
+  agentActiveDesc.textContent = config.desc;
+  agentModeBadge.textContent = config.badge;
+  questionInput.placeholder = config.placeholder;
 
-  // ===================================================================
-  // Lógica del Divisor (Resizer)
-  // ===================================================================
-  const resizer = document.getElementById('dragMe');
-  const leftSide = document.querySelector('.left-section');
-  const rightSide = document.querySelector('.chat-section');
-  let isHandlerDragging = false;
+  chatHistory = [];
+  voiceManager.stopSpeaking();
 
-  resizer.addEventListener('mousedown', function(e) {
-    isHandlerDragging = true;
-    resizer.classList.add('resizing');
-    document.body.style.cursor = 'col-resize';
-    leftSide.style.userSelect = 'none';
-    leftSide.style.pointerEvents = 'none';
-    rightSide.style.userSelect = 'none';
-    rightSide.style.pointerEvents = 'none';
+  if (mode === 'practica3') {
+    mainContent.classList.remove('mode-ia');
+  } else {
+    mainContent.classList.add('mode-ia');
+  }
+
+  renderHeroWelcome();
+}
+
+tabButtons.forEach(btn => {
+  btn.addEventListener('click', () => switchAgent(btn.dataset.mode));
+});
+
+// ===================================================================
+// Utilidades: Limpiar y Exportar Chat
+// ===================================================================
+clearChatBtn.addEventListener('click', () => {
+  if (chatHistory.length === 0) return;
+  if (confirm('¿Deseas vaciar la conversación actual?')) {
+    chatHistory = [];
+    voiceManager.stopSpeaking();
+    renderHeroWelcome();
+  }
+});
+
+exportChatBtn.addEventListener('click', () => {
+  if (chatHistory.length === 0) {
+    alert('No hay mensajes en la conversación para exportar.');
+    return;
+  }
+
+  const agent = AGENTS_CONFIG[currentMode];
+  let mdContent = `# Registro de Conversación - ${agent.title}\n`;
+  mdContent += `*Fecha:* ${new Date().toLocaleString()}  \n`;
+  mdContent += `*Modo:* ${agent.badge}\n\n---\n\n`;
+
+  chatHistory.forEach(msg => {
+    const roleName = msg.role === 'user' ? '🧑‍💻 Usuario' : `🤖 ${agent.title}`;
+    mdContent += `### ${roleName}\n\n${msg.content}\n\n---\n\n`;
   });
 
-  document.addEventListener('mousemove', function(e) {
-    if (!isHandlerDragging) return;
-    
-    const containerOffsetLeft = mainContent.offsetLeft;
-    const pointerRelativeXpos = e.clientX - containerOffsetLeft;
-    const boxWidth = mainContent.offsetWidth;
-    
-    // Convertir a porcentaje, limitando entre 20% y 80%
-    const flexBasis = Math.max(20, Math.min((pointerRelativeXpos / boxWidth) * 100, 80));
-    
-    leftSide.style.flex = `0 0 ${flexBasis}%`;
-  });
+  const blob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', `NexusIA_${currentMode}_${Date.now()}.md`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+});
 
-  document.addEventListener('mouseup', function(e) {
-    if (isHandlerDragging) {
-      isHandlerDragging = false;
-      resizer.classList.remove('resizing');
-      document.body.style.cursor = '';
-      leftSide.style.removeProperty('user-select');
-      leftSide.style.removeProperty('pointer-events');
-      rightSide.style.removeProperty('user-select');
-      rightSide.style.removeProperty('pointer-events');
-    }
-  });
+// ===================================================================
+// Eventos de Envío de Input
+// ===================================================================
+sendButton.addEventListener('click', () => {
+  submitUserQuestion(questionInput.value);
+});
+
+questionInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    submitUserQuestion(questionInput.value);
+  }
+});
+
+// ===================================================================
+// Divisor Redimensionable (Resizer)
+// ===================================================================
+const resizer = document.getElementById('dragMe');
+const leftSide = document.querySelector('.left-section');
+const rightSide = document.querySelector('.chat-section');
+let isHandlerDragging = false;
+
+resizer.addEventListener('mousedown', function(e) {
+  isHandlerDragging = true;
+  resizer.classList.add('resizing');
+  document.body.style.cursor = 'col-resize';
+  leftSide.style.userSelect = 'none';
+  leftSide.style.pointerEvents = 'none';
+  rightSide.style.userSelect = 'none';
+  rightSide.style.pointerEvents = 'none';
+});
+
+document.addEventListener('mousemove', function(e) {
+  if (!isHandlerDragging) return;
+  const containerOffsetLeft = mainContent.offsetLeft;
+  const pointerRelativeXpos = e.clientX - containerOffsetLeft;
+  const boxWidth = mainContent.offsetWidth;
+  const flexBasis = Math.max(20, Math.min((pointerRelativeXpos / boxWidth) * 100, 80));
+  leftSide.style.flex = `0 0 ${flexBasis}%`;
+});
+
+document.addEventListener('mouseup', function(e) {
+  if (isHandlerDragging) {
+    isHandlerDragging = false;
+    resizer.classList.remove('resizing');
+    document.body.style.cursor = '';
+    leftSide.style.removeProperty('user-select');
+    leftSide.style.removeProperty('pointer-events');
+    rightSide.style.removeProperty('user-select');
+    rightSide.style.removeProperty('pointer-events');
+  }
+});
+
+// Inicialización
+switchAgent('capacitaciones');

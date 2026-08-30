@@ -23,61 +23,26 @@
 <body data-agent="capacitaciones">
   <div class="gemini-ambient-bg"></div>
 
-  <!-- Contenedor Principal de la App (Gemini Shell) -->
+  <!-- Contenedor Principal de la App (Gemini Clean Layout) -->
   <div class="gemini-app-shell">
-    
-    <!-- 1. Barra Lateral de Iconos (Gemini Left Rail) -->
-    <aside class="gemini-sidebar-rail" aria-label="Navegación principal">
-      <div class="rail-top">
-        <div class="rail-logo-btn" title="Gemini IA - Nexus IA">
-          <svg class="gemini-star-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="geminiStarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#4285F4" />
-                <stop offset="35%" stop-color="#9B72CB" />
-                <stop offset="70%" stop-color="#D96570" />
-                <stop offset="100%" stop-color="#00E5FF" />
-              </linearGradient>
-            </defs>
-            <path d="M12 2C12 7.52 7.52 12 2 12C7.52 12 12 16.48 12 22C12 16.48 16.48 12 22 12C16.48 12 12 7.52 12 2Z" fill="url(#geminiStarGrad)"/>
-          </svg>
-        </div>
-
-        <!-- Botones de Navegación Rápida / Agentes -->
-        <div class="rail-nav-group">
-          <button class="rail-btn agent-tab active" data-mode="capacitaciones" id="tab-capacitaciones" title="Agente Capacitaciones (Actividad sincrónica 3)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-            <span class="rail-tooltip">Agente Capacitaciones (Actividad sincrónica 3)</span>
-          </button>
-          <button class="rail-btn agent-tab" data-mode="curzas" id="tab-curzas" title="IA Curzas (Actividad asincrónica 3)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="21" x2="21" y2="21"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="5 6 12 3 19 6"/><line x1="4" y1="10" x2="4" y2="21"/><line x1="20" y1="10" x2="20" y2="21"/><line x1="8" y1="14" x2="8" y2="17"/><line x1="12" y1="14" x2="12" y2="17"/><line x1="16" y1="14" x2="16" y2="17"/></svg>
-            <span class="rail-tooltip">IA Curzas (Actividad asincrónica 3)</span>
-          </button>
-          <button class="rail-btn agent-tab" data-mode="practica3" id="tab-practica3" title="Práctica 3 (Subir PDF)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-            <span class="rail-tooltip">Práctica 3 (Subir PDF)</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Iconos Inferiores del Rail -->
-      <div class="rail-bottom">
-        <button class="rail-btn" id="rail-settings-btn" title="Configuración de Asistentes">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          <span class="rail-tooltip">Ajustes</span>
-        </button>
-        <div class="rail-user-avatar" title="Usuario Nexus">
-          <div class="avatar-circle">🧑‍💻</div>
-        </div>
-      </div>
-    </aside>
-
-    <!-- 2. Área de Trabajo Principal (Gemini Main Canvas) -->
-    <main class="gemini-main-canvas">
+    <div class="gemini-main-container">
       
-      <!-- Barra Superior Gemini Minimalista -->
+      <!-- Barra Superior Gemini -->
       <header class="gemini-top-bar">
         <div class="top-bar-left">
+          <div class="app-logo-wrapper" title="Nexus IA">
+            <svg class="gemini-star-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="geminiStarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#4285F4" />
+                  <stop offset="35%" stop-color="#9B72CB" />
+                  <stop offset="70%" stop-color="#D96570" />
+                  <stop offset="100%" stop-color="#00E5FF" />
+                </linearGradient>
+              </defs>
+              <path d="M12 2C12 7.52 7.52 12 2 12C7.52 12 12 16.48 12 22C12 16.48 16.48 12 22 12C16.48 12 12 7.52 12 2Z" fill="url(#geminiStarGrad)"/>
+            </svg>
+          </div>
           <div class="header-titles">
             <div class="brand-line">
               <h1>Nexus IA</h1>
@@ -90,23 +55,23 @@
           </div>
         </div>
 
-        <!-- Selector Segmented en Barra Superior para selección rápida -->
+        <!-- Selector de Asistentes Segmented Tabs -->
         <nav class="agent-nav" aria-label="Selección de Asistente">
-          <button class="agent-tab active" data-mode="capacitaciones">
+          <button class="agent-tab active" data-mode="capacitaciones" id="tab-capacitaciones">
             <span class="tab-icon">🎓</span>
             <div class="tab-text">
               <span class="tab-title">Agente Capacitaciones</span>
               <span class="tab-sub">(Actividad sincrónica 3)</span>
             </div>
           </button>
-          <button class="agent-tab" data-mode="curzas">
+          <button class="agent-tab" data-mode="curzas" id="tab-curzas">
             <span class="tab-icon">🏛️</span>
             <div class="tab-text">
               <span class="tab-title">IA Curzas</span>
               <span class="tab-sub">(Actividad asincrónica 3)</span>
             </div>
           </button>
-          <button class="agent-tab" data-mode="practica3">
+          <button class="agent-tab" data-mode="practica3" id="tab-practica3">
             <span class="tab-icon">📑</span>
             <div class="tab-text">
               <span class="tab-title">Práctica 3</span>
@@ -115,13 +80,8 @@
           </button>
         </nav>
 
-        <!-- Botones de Acción Superiores (Estilo Botón Azul Gemini "Cambiar a plan superior") -->
+        <!-- Utilidades del Chat (Limpiar / Exportar) -->
         <div class="top-bar-right">
-          <div class="gemini-upgrade-btn" title="Modo Ultra Activo">
-            <svg class="upgrade-sparkle" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"/></svg>
-            <span>Cambiar a plan superior</span>
-          </div>
-          
           <div class="header-actions">
             <button id="clear-chat-btn" class="util-btn" title="Limpiar conversación actual" aria-label="Limpiar chat">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -281,7 +241,7 @@
           </div>
         </section>
       </div>
-    </main>
+    </div>
   </div>
   
   <script src="./js/modules/voice.js"></script>
